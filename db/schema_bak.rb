@@ -11,18 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141127013213) do
+ActiveRecord::Schema.define(version: 20141126151806) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "apps", force: true do |t|
-    t.string   "api_key"
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "api_rpm"
-  end
 
   create_table "businesses", force: true do |t|
     t.string   "yelp_business_id"
@@ -53,6 +45,8 @@ ActiveRecord::Schema.define(version: 20141127013213) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "reviews_count", default: 0, null: false
+    t.string   "api_key"
+    t.integer  "api_rpm"
   end
 
 end

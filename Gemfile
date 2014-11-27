@@ -42,3 +42,6 @@ gem 'predictionio'
 # For Heroku
 gem 'rails_12factor'
 gem 'unicorn'
+
+# For kaminari
+gem 'kaminari'
