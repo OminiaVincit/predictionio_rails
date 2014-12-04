@@ -1,6 +1,16 @@
 # Yelpio API
 Yelpio API is a *short api* service using the YELP data set and prediction IO system.
 
+## API server
++ http://yelpio.hongo.wide.ad.jp/api/v1/api-doc
+## Github
++ Src: https://github.com/OminiaVincit/predictionio_rails
++ Ref: https://github.com/ramaboo/predictionio_rails/
+## Prediction IO
++ http://prediction.io/
+## Yelp data set
++ https://www.kaggle.com/c/yelp-recsys-2013/data
+
 # Data schema
 
 ## App model
@@ -52,15 +62,35 @@ Yelpio API is a *short api* service using the YELP data set and prediction IO sy
     	t.datetime "created_at"
     	t.datetime "updated_at"
 	end
-  
+
+# Api_key token access *disabled now* [http://yelpio.hongo.wide.ad.jp/api/apps]
+If the server require API-key to respond the resource, you need to sumit your applications and get the api_key. This authenticate function is disabled now.
+
+## [POST] http://yelpio.hongo.wide.ad.jp/api/apps
+
++ curl -H "Content-Type: application/json" -X POST --data "@app.json" http://yelpio.hongo.wide.ad.jp/api/apps
+
++ Request (@app.json) (application/json)
+
+		[{"app":{"name": "TestYelpPioAPI"}}]
+
++ Response 201 (application/json)
+
+		{"id":2,"api_key":"omQKusYLYZuoKfSrUOFaJAtt","name":"TestYelpPioAPI","created_at":"2014-12-04T15:46:22.987Z","updated_at":"2014-12-04T15:46:22.987Z","api_rpm":null}z
+
++ Using api_key to access API (Ex.) 
++ curl -H "Authorization: Token token=omQKusYLYZuoKfSrUOFaJAtt" http://yelpio.hongo.wide.ad.jp/api/v1/users?page_size=1
+
+		[{"id":43885,"yelp_user_id":"AppTestForPostYelpUserId","name":"Jessica","average_stars":null,"created_at":"2014-12-04T09:30:53.555Z","updated_at":"2014-12-04T09:33:32.789Z","reviews_count":0}]
+
 # Group Users
 Users related resources of the **Yelpio API**
 
 ## Users Collection [http://yelpio.hongo.wide.ad.jp/api/v1/users]
 ### List of params
-+ sort  *{id(default), name, reviews_count, created_at, updated_at}*
-+ order *{ASC, DESC, default = DESC}*
-+ page {default=1}, page_size {default=25}
++ sort  *{value: "id", "name", "reviews_count", "created_at", "updated_at", default = "id"}*
++ order *{value: "ASC", "DESC", default = "DESC"}*
++ page *{value: number, default=1}*, page_size *{value: number, default=25}*
 
 ### List all users, default for *page = 1, page_size = 25, DESC sorted id* [GET]
 + curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/users"
@@ -129,8 +159,8 @@ A single user object with all its details
 
 ### Retrieve user from id or yelp_user_id [GET]
 + curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/users/6279"
-+ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/users.json?id=6279"
-+ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/users.json?yelp_user_id=fczQCSmaWF78toLEmb0Zsw"
++ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/users?id=6279"
++ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/users?yelp_user_id=fczQCSmaWF78toLEmb0Zsw"
 
 + Response 200 (application/json)
 
@@ -181,7 +211,7 @@ Businesses related resources of the **Yelpio API**
 + Response 200 (application/json)
 
 ### List all businesses in categorize [GET]
-+ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/businesses.json?categorize=restaurant&page=1&page_size=10"
++ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/businesses?categorize=restaurant&page=1&page_size=10"
 + Response 200 (application/json)
 
 ### List all nearest businesses near a location (or coordinate) with radius in km [GET]
@@ -199,15 +229,15 @@ A single user object with all its details
 + yelp_business_id (string) ... Previous defined business_id in YELP_TRAINING_DATA_ 
 
 ### Retrieve business from id or yelp_user_id [GET]
-+ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/businesses/11133"
-+ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/businesses?id=11133"
++ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/businesses/1113"
++ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/businesses?id=1113"
 + curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/businesses?yelp_business_id=Zdi-Mrwk_JNnhopAAbxRcQ"
 
 + Response 200 (application/json)
 + Response null JSON string if the business not found
 
 # Group Reviews
-Businesses related resources of the **Yelpio API**
+Reviews related resources of the **Yelpio API**
 
 ## Reviews Collection [http://yelpio.hongo.wide.ad.jp/api/v1/reviews]
 ### List of params
@@ -216,11 +246,11 @@ Businesses related resources of the **Yelpio API**
 + page *{value: number, default=1}*, page_size *{value: number, default=25}*
 
 ### List all reviews, default for *page = 1, page_size = 25, DESC sorted id* [GET]
-+ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/reviews.json"
++ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/reviews"
 + Response 200 (application/json)
 
 ### List all reviews sorted by business id [GET]
-+ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/reviews.json?sort=business_id&page=1&page_size=10"
++ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/reviews?sort=business_id&page=1&page_size=10"
 + Response 200 (application/json)
 
 ### Create new review [POST]
@@ -247,9 +277,9 @@ A single user object with all its details
 
 ### Retrieve reviews from reviews_id, yelp_business_id or yelp_user_id [GET]
 + curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/reviews/11133"
-+ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/reviews.json?yelp_business_id=rncjoVoEFUJGCUoC1JgnUA"
-+ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/reviews.json?business_id=1234"
-+ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/reviews.json?yelp_user_id=PahwPVfd6BkDyO8KCFEoWw&yelp_business_id=3jqOv6re-xPYOg7srmi7tg"
++ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/reviews?yelp_business_id=rncjoVoEFUJGCUoC1JgnUA"
++ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/reviews?business_id=1234"
++ curl -H "Accept: application/json" "http://yelpio.hongo.wide.ad.jp/api/v1/reviews?yelp_user_id=PahwPVfd6BkDyO8KCFEoWw&yelp_business_id=3jqOv6re-xPYOg7srmi7tg"
 
 + Response 200 (application/json)
 

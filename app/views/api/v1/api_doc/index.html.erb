@@ -1,0 +1,252 @@
+<h1 id="yelpio-api">Yelpio API</h1>
+<p>Yelpio API is a <em>short api</em> service using the YELP data set and prediction IO system.</p>
+<h2 id="api-server">API server</h2>
+<ul>
+<li><a href="http://yelpio.hongo.wide.ad.jp/api/v1/api_doc/index">http://yelpio.hongo.wide.ad.jp/api/v1/api_doc/index</a></li>
+</ul>
+
+<h2 id="github">Github</h2>
+<ul>
+<li>Src: <a href="https://github.com/OminiaVincit/predictionio_rails">https://github.com/OminiaVincit/predictionio_rails</a> </li>
+<li>Ref: <a href="https://github.com/ramaboo/predictionio_rails/">https://github.com/ramaboo/predictionio_rails/</a></li>
+</ul>
+
+<h2 id="predict">Prediction IO</h2>
+<ul>
+<li><a href="http://prediction.io/">http://prediction.io/</a></li>
+</ul>
+
+<h2 id="yelp-data">YELP data set</h2>
+<ul>
+<li><a href="https://www.kaggle.com/c/yelp-recsys-2013/data">https://www.kaggle.com/c/yelp-recsys-2013/data</a></li>
+</ul>
+
+<h1 id="data-schema">Data schema</h1>
+<h2 id="app-model">App model</h2>
+<pre><code>create_table &quot;apps&quot;, force: true do |t|
+    t.string   &quot;api_key&quot;
+    t.string   &quot;name&quot;
+    t.datetime &quot;created_at&quot;
+    t.datetime &quot;updated_at&quot;
+    t.string   &quot;api_rpm&quot;
+end</code></pre>
+<h2 id="user-model">User model</h2>
+<pre><code>create_table &quot;users&quot;, force: true do |t|
+    t.string   &quot;yelp_user_id&quot;
+    t.string   &quot;name&quot;
+    t.float    &quot;average_stars&quot;
+    t.datetime &quot;created_at&quot;
+    t.datetime &quot;updated_at&quot;
+    t.integer  &quot;reviews_count&quot;, default: 0, null: false
+end</code></pre>
+<h2 id="business-model">Business model</h2>
+<pre><code>create_table &quot;businesses&quot;, force: true do |t|
+    t.string   &quot;yelp_business_id&quot;
+    t.string   &quot;name&quot;
+    t.string   &quot;full_address&quot;
+    t.string   &quot;city&quot;
+    t.string   &quot;state&quot;
+    t.float    &quot;stars&quot;
+    t.datetime &quot;created_at&quot;
+    t.datetime &quot;updated_at&quot;
+    t.float    &quot;longitude&quot;
+    t.float    &quot;latitude&quot;
+    t.text     &quot;categories&quot;
+end</code></pre>
+<h2 id="review-model">Review model</h2>
+<pre><code>create_table &quot;reviews&quot;, force: true do |t|
+    t.string   &quot;yelp_business_id&quot;
+    t.string   &quot;yelp_user_id&quot;
+    t.float    &quot;stars&quot;
+    t.text     &quot;content&quot;
+    t.integer  &quot;user_id&quot;
+    t.integer  &quot;business_id&quot;
+    t.datetime &quot;created_at&quot;
+    t.datetime &quot;updated_at&quot;
+end</code></pre>
+<h1 id="api_key-token">Api_key token access <em>disabled now</em> [<a href="http://yelpio.hongo.wide.ad.jp/api/apps">http://yelpio.hongo.wide.ad.jp/api/apps</a>]</h1>
+<p>If the server require API-key to respond the resource, you need to sumit your applications and get the api_key. This authenticate function is disabled now.</p>
+<h2 id="post-http">Get the API key [POST]</h2>
+<ul>
+<li><p>curl -H “Content-Type: application/json” -X POST –data “<span class="citation">@app.json</span>” <a href="http://yelpio.hongo.wide.ad.jp/api/apps">http://yelpio.hongo.wide.ad.jp/api/apps</a></p></li>
+<li><p>Request (<span class="citation">@app.json</span>) (application/json)</p>
+<pre><code>[{&quot;app&quot;:{&quot;name&quot;: &quot;TestYelpPioAPI&quot;}}]</code></pre></li>
+<li><p>Response 201 (application/json)</p>
+<pre><code>{&quot;id&quot;:2,&quot;api_key&quot;:&quot;omQKusYLYZuoKfSrUOFaJAtt&quot;,&quot;name&quot;:&quot;TestYelpPioAPI&quot;,&quot;created_at&quot;:&quot;2014-12-04T15:46:22.987Z&quot;,&quot;updated_at&quot;:&quot;2014-12-04T15:46:22.987Z&quot;,&quot;api_rpm&quot;:null}z</code></pre></li>
+<li>Using api_key to access API (Ex.)</li>
+<li><p>curl -H “Authorization: Token token=omQKusYLYZuoKfSrUOFaJAtt” http://yelpio.hongo.wide.ad.jp/api/v1/users?page_size=1</p>
+<pre><code>[{&quot;id&quot;:43885,&quot;yelp_user_id&quot;:&quot;AppTestForPostYelpUserId&quot;,&quot;name&quot;:&quot;Jessica&quot;,&quot;average_stars&quot;:null,&quot;created_at&quot;:&quot;2014-12-04T09:30:53.555Z&quot;,&quot;updated_at&quot;:&quot;2014-12-04T09:33:32.789Z&quot;,&quot;reviews_count&quot;:0}]</code></pre></li>
+</ul>
+<h1 id="group-users">Group Users</h1>
+<p>Users related resources of the <strong>Yelpio API</strong></p>
+<h2 id="users-collection-">Users Collection [<a href="http://yelpio.hongo.wide.ad.jp/api/v1/users">http://yelpio.hongo.wide.ad.jp/api/v1/users</a>]</h2>
+<h3 id="list-of-params">List of params</h3>
+<ul>
+<li>sort <em>{value: “id”, “name”, “reviews_count”, “created_at”, “updated_at”, default = “id”}</em></li>
+<li>order <em>{value: “ASC”, “DESC”, default = “DESC”}</em></li>
+<li>page <em>{value: number, default=1}</em>, page_size <em>{value: number, default=25}</em></li>
+</ul>
+<h3 id="list-all-users-default-for-page-1-page_size-25-desc-sorted-id-get">List all users, default for <em>page = 1, page_size = 25, DESC sorted id</em> [GET]</h3>
+<ul>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/users”</li>
+<li><p>Response 200 (application/json)</p>
+<pre><code>[{&quot;id&quot;:43884,&quot;yelp_user_id&quot;:&quot;TestForYelpUserIdAgain10&quot;,&quot;name&quot;:&quot;Jimi2&quot;,&quot;average_stars&quot;:2.70833333333334,&quot;created_at&quot;:&quot;2014-12-03T07:59:12.437Z&quot;,&quot;updated_at&quot;:&quot;2014-12-04T07:50:35.665Z&quot;,&quot;reviews_count&quot;:8
+}, {
+  &quot;id&quot;:43883,&quot;yelp_user_id&quot;:&quot;TestForYelpUserIdAgain9&quot;,&quot;name&quot;:&quot;Test for name2&quot;,&quot;average_stars&quot;:null,&quot;created_at&quot;:&quot;2014-12-03T07:53:51.374Z&quot;,&quot;updated_at&quot;:&quot;2014-12-03T07:57:45.212Z&quot;,&quot;reviews_count&quot;:0
+}, {
+  &quot;id&quot;:43882,&quot;yelp_user_id&quot;:&quot;TestForYelpUserIdAgain8&quot;,&quot;name&quot;:&quot;Test for name&quot;,&quot;average_stars&quot;:null,&quot;created_at&quot;:&quot;2014-12-03T07:37:43.365Z&quot;,&quot;updated_at&quot;:&quot;2014-12-03T07:37:43.365Z&quot;,&quot;reviews_count&quot;:0
+},...]</code></pre></li>
+</ul>
+<h3 id="list-n-page_sizen-latest-users-get">List n (page_size=n) latest users [GET]</h3>
+<ul>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/users?page=1&amp;page_size=3”</li>
+<li><p>Response 200 (application/json)]</p>
+<pre><code>[{&quot;id&quot;:43884,&quot;yelp_user_id&quot;:&quot;TestForYelpUserIdAgain10&quot;,&quot;name&quot;:&quot;Jimi2&quot;,&quot;average_stars&quot;:2.70833333333334,&quot;created_at&quot;:&quot;2014-12-03T07:59:12.437Z&quot;,&quot;updated_at&quot;:&quot;2014-12-04T07:50:35.665Z&quot;,&quot;reviews_count&quot;:8
+}, {
+  &quot;id&quot;:43883,&quot;yelp_user_id&quot;:&quot;TestForYelpUserIdAgain9&quot;,&quot;name&quot;:&quot;Test for name2&quot;,&quot;average_stars&quot;:null,&quot;created_at&quot;:&quot;2014-12-03T07:53:51.374Z&quot;,&quot;updated_at&quot;:&quot;2014-12-03T07:57:45.212Z&quot;,&quot;reviews_count&quot;:0
+}, {
+  &quot;id&quot;:43882,&quot;yelp_user_id&quot;:&quot;TestForYelpUserIdAgain8&quot;,&quot;name&quot;:&quot;Test for name&quot;,&quot;average_stars&quot;:null,&quot;created_at&quot;:&quot;2014-12-03T07:37:43.365Z&quot;,&quot;updated_at&quot;:&quot;2014-12-03T07:37:43.365Z&quot;,&quot;reviews_count&quot;:0
+}]</code></pre></li>
+</ul>
+<h3 id="list-all-users-sorted-by-name-get">List all users sorted by name [GET]</h3>
+<ul>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/users?sort=name&amp;page=1&amp;page_size=10”</li>
+<li><p>Response 200 (application/json)</p>
+<pre><code>[{&quot;id&quot;:35225,&quot;yelp_user_id&quot;:&quot;YM-Ynn2LCBJHP6p1l4P6xQ&quot;,&quot;name&quot;:&quot;Zuleika&quot;,&quot;average_stars&quot;:3.86,&quot;created_at&quot;:&quot;2014-11-29T04:21:39.573Z&quot;,&quot;updated_at&quot;:&quot;2014-11-29T04:21:39.573Z&quot;,&quot;reviews_count&quot;:1
+}, {
+  &quot;id&quot;:25498,&quot;yelp_user_id&quot;:&quot;-_GY1HTGxxE0ZyQ6cw0KSQ&quot;,&quot;name&quot;:&quot;Zsazsa&quot;,&quot;average_stars&quot;:2.33,&quot;created_at&quot;:&quot;2014-11-29T04:18:46.829Z&quot;,&quot;updated_at&quot;:&quot;2014-11-29T04:18:46.829Z&quot;,&quot;reviews_count&quot;:1
+}, {
+  &quot;id&quot;:26798,&quot;yelp_user_id&quot;:&quot;FueQBxW27QIVkg7Pbf_Tuw&quot;,&quot;name&quot;:&quot;Zoya&quot;,&quot;average_stars&quot;:3.54,&quot;created_at&quot;:&quot;2014-11-29T04:19:09.916Z&quot;,&quot;updated_at&quot;:&quot;2014-11-29T04:19:09.916Z&quot;,&quot;reviews_count&quot;:4
+},...]</code></pre></li>
+</ul>
+<h3 id="list-all-users-sorted-by-reviews_count-get">List all users sorted by reviews_count [GET]</h3>
+<ul>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/users?sort=reviews_count&amp;page=1&amp;page_size=10”</li>
+<li><p>Response 200 (application/json)</p>
+<pre><code>[{&quot;id&quot;:6279,&quot;yelp_user_id&quot;:&quot;fczQCSmaWF78toLEmb0Zsw&quot;,&quot;name&quot;:&quot;Gabi&quot;,&quot;average_stars&quot;:4.0,&quot;created_at&quot;:&quot;2014-11-29T04:13:06.625Z&quot;,&quot;updated_at&quot;:&quot;2014-11-29T04:13:06.625Z&quot;,&quot;reviews_count&quot;:588
+  }, {
+  &quot;id&quot;:9722,&quot;yelp_user_id&quot;:&quot;90a6z--_CUrl84aCzZyPsg&quot;,&quot;name&quot;:&quot;Michael&quot;,&quot;average_stars&quot;:3.99,&quot;created_at&quot;:&quot;2014-11-29T04:14:07.389Z&quot;,&quot;updated_at&quot;:&quot;2014-11-29T04:14:07.389Z&quot;,&quot;reviews_count&quot;:506
+  }, {
+  &quot;id&quot;:6907,&quot;yelp_user_id&quot;:&quot;4ozupHULqGyO42s3zNUzOQ&quot;,&quot;name&quot;:&quot;Lindsey&quot;,&quot;average_stars&quot;:4.29,&quot;created_at&quot;:&quot;2014-11-29T04:13:17.723Z&quot;,&quot;updated_at&quot;:&quot;2014-11-29T04:13:17.723Z&quot;,&quot;reviews_count&quot;:442
+},...]</code></pre></li>
+</ul>
+<h3 id="create-a-user-post">Create a user [POST]</h3>
+<ul>
+<li>curl -H “Content-Type: application/json” -X POST –data “<span class="citation">@user.json</span>” http://yelpio.hongo.wide.ad.jp/api/v1/users</li>
+<li><p>Request (<span class="citation">@user.json</span>) (application/json)</p>
+<pre><code>[{&quot;user&quot;:{&quot;name&quot;:&quot;Ammy&quot;, &quot;yelp_user_id&quot;:&quot;AppTestForPostYelpUserId&quot;}}]</code></pre></li>
+<li><p>Response 201 (application/json)</p>
+<pre><code>[{&quot;id&quot;:43885,&quot;yelp_user_id&quot;:&quot;AppTestForPostYelpUserId&quot;,&quot;name&quot;:&quot;Ammy&quot;,&quot;average_stars&quot;:null,&quot;created_at&quot;:&quot;2014-12-04T09:30:53.555Z&quot;,&quot;updated_at&quot;:&quot;2014-12-04T09:30:53.555Z&quot;,&quot;reviews_count&quot;:0}]</code></pre></li>
+<li><p>Response null JSON string if the user already existed in the database</p></li>
+</ul>
+<h2 id="user-usersidyelp_user_id">User [/users/{id}&amp;{yelp_user_id}]</h2>
+<p>A single user object with all its details ### List of params + id (number, <code>1</code>) … Numeric <code>id</code> of the user to perform action. + yelp_user_id (string) … Previous defined user_id in YELP_TRAINING_DATA_ + method (string, ‘predict’)… Get the predicted result from PIO event server + num (number, default=10)… Number of the predicted result from PIO event server</p>
+<h3 id="retrieve-user-from-id-or-yelp_user_id-get">Retrieve user from id or yelp_user_id [GET]</h3>
+<ul>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/users/6279”</li>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/users?id=6279”</li>
+<li><p>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/users?yelp_user_id=fczQCSmaWF78toLEmb0Zsw”</p></li>
+<li><p>Response 200 (application/json)</p>
+<pre><code>[{&quot;id&quot;:6279,&quot;yelp_user_id&quot;:&quot;fczQCSmaWF78toLEmb0Zsw&quot;,&quot;name&quot;:&quot;Gabi&quot;,&quot;average_stars&quot;:4.0,&quot;created_at&quot;:&quot;2014-11-29T04:13:06.625Z&quot;,&quot;updated_at&quot;:&quot;2014-11-29T04:13:06.625Z&quot;,&quot;reviews_count&quot;:588}]</code></pre></li>
+<li><p>Response null JSON string if the user not found</p></li>
+</ul>
+<h3 id="update-user-information-put">Update user information [PUT]</h3>
+<ul>
+<li>curl -H “Content-Type: application/json” -X PUT –data “<span class="citation">@user.json</span>” http://yelpio.hongo.wide.ad.jp/api/v1/users/1/</li>
+<li><p>Request (<span class="citation">@user.json</span>) (application/json)</p>
+<pre><code>[{&quot;user&quot;:{&quot;name&quot;:&quot;Jessica&quot;, &quot;yelp_user_id&quot;:&quot;AppTestForPostYelpUserId&quot;}}]</code></pre></li>
+<li><p>Response 201 (application/json)</p>
+<pre><code>[{&quot;id&quot;:43885,&quot;yelp_user_id&quot;:&quot;AppTestForPostYelpUserId&quot;,&quot;name&quot;:&quot;Jessica&quot;,&quot;average_stars&quot;:null,&quot;created_at&quot;:&quot;2014-12-04T09:30:53.555Z&quot;,&quot;updated_at&quot;:&quot;2014-12-04T09:33:32.789Z&quot;,&quot;reviews_count&quot;:0}]</code></pre></li>
+<li><p>Response null JSON string if the user doesn’t exist in the database</p></li>
+</ul>
+<h3 id="retrieve-n-num-n-predicted-result-restaurant-information-of-a-userget">Retrieve n (num = n) predicted result (restaurant information) of a user[GET]</h3>
+<ul>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/users/6279?method=predict&amp;num=1”</li>
+<li><p>Response 200 (application/json)</p>
+<pre><code>[{&quot;business&quot;:{&quot;id&quot;:4408,&quot;yelp_business_id&quot;:&quot;Nwh2N0k-u4q_dV2VLY4Fgw&quot;,&quot;name&quot;:&quot;Cafe At Sun City&quot;,&quot;full_address&quot;:&quot;3385 N Hunt Hwy\nSte 121\nFlorence, AZ 85132&quot;,&quot;city&quot;:&quot;Florence&quot;,&quot;state&quot;:&quot;AZ&quot;,&quot;stars&quot;:2.5,&quot;created_at&quot;:&quot;2014-11-29T06:23:27.377Z&quot;,&quot;updated_at&quot;:&quot;2014-12-02T07:00:15.921Z&quot;,&quot;longitude&quot;:-111.484426,&quot;latitude&quot;:33.06293,&quot;categories&quot;:[&quot;Cafes&quot;,&quot;Restaurants&quot;]},&quot;score&quot;:5.0}]</code></pre></li>
+<li><p>Response null JSON string if the user doesn’t exist in the database</p></li>
+</ul>
+<h1 id="group-businesses">Group Businesses</h1>
+<p>Businesses related resources of the <strong>Yelpio API</strong></p>
+<h2 id="businesses-collection">Businesses Collection [<a href="http://yelpio.hongo.wide.ad.jp/api/v1/businesses">http://yelpio.hongo.wide.ad.jp/api/v1/businesses</a>]</h2>
+<h3 id="list-of-params">List of params</h3>
+<ul>
+<li>sort <em>{value: “id”, “name”, “created_at”, “updated_at”, default = “id”}</em></li>
+<li>order <em>{value: “ASC”, “DESC”, default = “DESC”}</em></li>
+<li>page <em>{value: number, default=1}</em>, page_size <em>{value: number, default=25}</em></li>
+<li>cagegorize *{value: string, ex: “restaurant”}</li>
+<li>location *{value: string, ex: “Scottsdale,AZ”}</li>
+<li>radius *{value: float number in km, default=10}</li>
+<li>longitude <em>{value: float number}</em></li>
+<li>latitude <em>{value: float number}</em></li>
+</ul>
+<h3 id="list-all-businesses-default-for-page-1-page_size-25-desc-sorted-id-get">List all businesses, default for <em>page = 1, page_size = 25, DESC sorted id</em> [GET]</h3>
+<ul>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/businesses”</li>
+<li>Response 200 (application/json)</li>
+</ul>
+<h3 id="list-all-businesses-sorted-by-business-name-get">List all businesses sorted by business name [GET]</h3>
+<ul>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/businesses?sort=name&amp;page=1&amp;page_size=10”</li>
+<li>Response 200 (application/json)</li>
+</ul>
+<h3 id="list-all-businesses-in-categorize-get">List all businesses in categorize [GET]</h3>
+<ul>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/businesses?categorize=restaurant&amp;page=1&amp;page_size=10”</li>
+<li>Response 200 (application/json)</li>
+</ul>
+<h3 id="list-all-nearest-businesses-near-a-location-or-coordinate-with-radius-in-km-get">List all nearest businesses near a location (or coordinate) with radius in km [GET]</h3>
+<ul>
+<li><p>By location: curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/businesses?categorize=restaurant&amp;radius=5&amp;location=Scottsdale,AZ”</p></li>
+<li><p>By coordinate: curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/businesses?categorize=restaurant&amp;radius=5&amp;longitude=-111.92605&amp;latitude=33.494”</p></li>
+<li><p>Top 10 nearest restaurant: curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/businesses?categorize=restaurant&amp;radius=5&amp;location=Scottsdale,AZ&amp;page_size=10”</p></li>
+</ul>
+<h2 id="business-businessesidyelp_business_id">Business [/businesses/{id}&amp;{yelp_business_id}]</h2>
+<p>A single user object with all its details ### List of params + id (number, <code>1</code>) … Numeric <code>id</code> of the user to perform action. + yelp_business_id (string) … Previous defined business_id in YELP_TRAINING_DATA_</p>
+<h3 id="retrieve-business-from-id-or-yelp_user_id-get">Retrieve business from id or yelp_user_id [GET]</h3>
+<ul>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/businesses/1113”</li>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/businesses?id=1113”</li>
+<li><p>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/businesses?yelp_business_id=Zdi-Mrwk_JNnhopAAbxRcQ”</p></li>
+<li>Response 200 (application/json)</li>
+<li><p>Response null JSON string if the business not found</p></li>
+</ul>
+<h1 id="group-reviews">Group Reviews</h1>
+<p>Reviews related resources of the <strong>Yelpio API</strong></p>
+<h2 id="reviews-collection-httpyelpio.hongo.wide.ad.jpapiv1reviews">Reviews Collection [<a href="http://yelpio.hongo.wide.ad.jp/api/v1/reviews">http://yelpio.hongo.wide.ad.jp/api/v1/reviews</a>]</h2>
+<h3 id="list-of-params">List of params</h3>
+<ul>
+<li>sort <em>{value: “id”, “user_id”, “business_id”, “yelp_user_id”, “yelp_business_id”, “stars”, “created_at”, “updated_at”, default = “id”}</em></li>
+<li>order <em>{value: “ASC”, “DESC”, default = “DESC”}</em></li>
+<li>page <em>{value: number, default=1}</em>, page_size <em>{value: number, default=25}</em></li>
+</ul>
+<h3 id="list-all-reviews-default-for-page-1-page_size-25-desc-sorted-id-get">List all reviews, default for <em>page = 1, page_size = 25, DESC sorted id</em> [GET]</h3>
+<ul>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/reviews”</li>
+<li>Response 200 (application/json)</li>
+</ul>
+<h3 id="list-all-reviews-sorted-by-business-id-get">List all reviews sorted by business id [GET]</h3>
+<ul>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/reviews?sort=business_id&amp;page=1&amp;page_size=10”</li>
+<li>Response 200 (application/json)</li>
+</ul>
+<h3 id="create-new-review-post">Create new review [POST]</h3>
+<ul>
+<li>Require parameter: yelp_business_id, yelp_user_id, stars</li>
+<li>curl -H “Content-Type: application/json” -X POST –data “<span class="citation">@review.json</span>” http://yelpio.hongo.wide.ad.jp/api/v1/reviews</li>
+<li><p>Request (<span class="citation">@review.json</span>) (application/json)</p>
+<pre><code>{&quot;review&quot;:{&quot;yelp_business_id&quot;:&quot;6yVe_iet5qD7SzVMhRYYog&quot;, &quot;yelp_user_id&quot;:&quot;TestForYelpUserIdAgain10&quot;, &quot;stars&quot;:4.0, &quot;content&quot;:&quot;I want to eat at here again&quot;}}</code></pre></li>
+<li><p>Response 201 (application/json)</p>
+<pre><code>{&quot;review&quot;:{&quot;yelp_business_id&quot;:&quot;6yVe_iet5qD7SzVMhRYYog&quot;, &quot;yelp_user_id&quot;:&quot;TestForYelpUserIdAgain10&quot;, &quot;stars&quot;:4.0, &quot;content&quot;:&quot;I want to eat at here again&quot;}}</code></pre></li>
+<li><p>Response null JSON string if the user already existed in the database</p></li>
+</ul>
+<h2 id="reviews-reviewsid">Reviews [/reviews/{id}]</h2>
+<p>A single user object with all its details ### List of params + id (number, <code>1</code>) … Numeric <code>id</code> of the user to perform action. + business_id + yelp_business_id (string) … Previous defined business_id in YELP_TRAINING_DATA_ + user_id + yelp_user_id</p>
+<h3 id="retrieve-reviews-from-reviews_id-yelp_business_id-or-yelp_user_id-get">Retrieve reviews from reviews_id, yelp_business_id or yelp_user_id [GET]</h3>
+<ul>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/reviews/11133”</li>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/reviews?yelp_business_id=rncjoVoEFUJGCUoC1JgnUA”</li>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/reviews?business_id=1234”</li>
+<li><p>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/reviews?yelp_user_id=PahwPVfd6BkDyO8KCFEoWw&amp;yelp_business_id=3jqOv6re-xPYOg7srmi7tg”</p></li>
+<li><p>Response 200 (application/json)</p></li>
+</ul>

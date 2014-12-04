@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  namespace :api do
+  namespace :v1 do
+    get 'api_doc/index'
+    end
+  end
+
   resources :users, only: [:index, :show]
 
   root 'users#index'
