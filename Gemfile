@@ -45,3 +45,4 @@ gem 'unicorn'
 
 # For kaminari
 gem 'kaminari'
+gem 'geocoder'

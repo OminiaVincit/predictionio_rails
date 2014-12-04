@@ -1,6 +1,13 @@
 class UsersController < ApplicationController
+
+  def create
+
+  end
+
   def index
+    catego = "restaurant"
     @users = User.order('reviews_count DESC').limit(20)
+    @businesses = Business.near('Phoenix, AZ', 50, :order => 'distance').where("LOWER(categories) LIKE ?", "%#{catego.downcase}%").limit(10)  
   end
 
   def show

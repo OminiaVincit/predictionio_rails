@@ -17,3 +17,22 @@
     <% end %>
   </tbody>
 </table>
+<h2>Restaurants near  you</h2>
+<table class="table table-striped">
+ <thead>
+   <tr>
+     <th>#</th>
+     <th>Name</th>
+     <th>Address</th>
+   </tr>
+ </thead>
+ <tbody>
+  <% @businesses.each do |business| %>
+    <tr>
+      <td><%= business.id %></td>
+      <td><%= business.name %></td>
+      <td><%= business.full_address %></td>
+    </tr>
+  <% end %>
+ </tbody> 
+</table>

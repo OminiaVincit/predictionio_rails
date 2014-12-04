@@ -27,5 +27,26 @@ namespace :import do
       # Display progress in the console.
       puts "Imported business #{business.id} with name #{business.name}."
     end
-  end
+ end
+ # Supply for adding categories, longitude, latitude data
+ task categories: :environment do
+   # Loop through each line of the data file
+   File.open(BUSINESS_DATA_FILE,'r').each_line do |line|
+     # Decode JSON
+     object = ActiveSupport::JSON.decode(line)
+
+     # Find existed business
+     business = Business.where(yelp_business_id: object['business_id']).first
+     if business
+       business.longitude = object['longitude']
+       business.latitude  = object['latitude']
+       business.categories     = object['categories']
+       
+       # Save the business
+       business.save
+       # Display progress in the console
+       puts "Imported categories, longitude, latitude for #{business.id} with categories #{business.categories} longitude #{business.longitude} latitude #{business.latitude}"
+     end   
+   end
+ end
 end

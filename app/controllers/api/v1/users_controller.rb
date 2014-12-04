@@ -1,6 +1,6 @@
 # app/controllers/api/v1/events_controller.rb
 class Api::V1::UsersController < Api::V1::BaseController
-  before_action :authenticate
+  #before_action :authenticate
   #before_action :authenticate_manual (for ref)
   #before_action :validate_rpm
   respond_to :json
@@ -36,9 +36,9 @@ class Api::V1::UsersController < Api::V1::BaseController
   # Override
   def show
     # Find the correct user.
-    @user = User.find(params[:id])
+    @user = User.where(id: params[:id]).first
     # Return the predicted result
-    if page_params[:method] == "predict"
+    if @user && page_params[:method] == "predict"
       # Defautl for number of results
       num = 10
       if page_params[:num] 
@@ -62,7 +62,7 @@ class Api::V1::UsersController < Api::V1::BaseController
         business_id = item.keys.first
 
         # Find the business.
-        business = Business.find(business_id)
+        business = Business.where(id: business_id).first
         recommendation[:business] = business
 
         # The value of the hash is the predicted preference score.
@@ -72,43 +72,61 @@ class Api::V1::UsersController < Api::V1::BaseController
         # Add to the array of recommendations.
         @recommendations << recommendation
         end
-        respond_with @recommendations.to_json
+        render :json =>  @recommendations
     elsif
-      respond_with @user.to_json
+      render :json =>  @user
     end
   end
   
   # POST /api/{plural_resource_name}
   def create 
-    #hkey = (resource_params[:user].nil?)
-    #if (!hkey)
-    #  hkey = (resource_params[:user][:name].blank?)
-    #end
-    #if hkey 
-    #  raise  ActionController::ParameterMissing.new("param not found: user_name")
-    #end
-    set_resource(resource_class.new(resource_params))
-    if get_resource.save
-      render :show, status: :created, location: get_resource
+    yelp_user_id = resource_params[:yelp_user_id]
+    user_name    = resource_params[:name]
+    save_flag    = false
+
+    if yelp_user_id && user_name && user_name.delete(' ').length > 0 && (!User.where(yelp_user_id: yelp_user_id).first)
+      @user = User.new
+      @user.yelp_user_id = yelp_user_id
+      @user.name         = user_name
+      set_resource(@user)
+      if get_resource.save
+        save_flag = true       
+      end   
+    end
+   
+    if save_flag == true
+      render :json => @user
     else
-      render json: get_resource.errors, status: :unprocessable_entity
+      render :json => {}
+      #render json: get_resource.errors, status: :unprocessable_entity
     end
   end
   
   # PATCH/PUT (update) /api/1
   def update
-    if get_resource.update(resource_params)
-      render :show
-    else
-      render json: get_resource.errors, status: :unprocessable_entity
+    user_id = resource_params[:yelp_user_id]
+    if user_id
+      @user = User.where(yelp_user_id: user_id).first
     end
+    user_name = resource_params[:name].delete(' ')
+    len = 0
+    if user_name
+      len = user_name.length
+    end
+    if len > 0 && @user && get_resource.update(resource_params)
+      render :json => @user
+    else
+      render :json => {}
+      #render json: get_resource.errors, status: :unprocessable_entity
+    end
+    
   end
   
   private
 
     # Permit format for update, create
     def user_params
-      params.require(:user).permit(:name, :yelp_user_id, :average_stars, :reviews_count)
+      params.require(:user).permit(:name, :yelp_user_id)
     end
 
     # Permit query GET like http://localhost:3000/api/users.json?yelp_user_id=Ndj0VsWFoIJQJV6p3zswzg

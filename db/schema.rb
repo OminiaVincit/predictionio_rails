@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141127013213) do
+ActiveRecord::Schema.define(version: 20141202035049) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,9 @@ ActiveRecord::Schema.define(version: 20141127013213) do
     t.float    "stars"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "longitude"
+    t.float    "latitude"
+    t.text     "categories"
   end
 
   create_table "reviews", force: true do |t|
