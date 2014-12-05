@@ -28,9 +28,9 @@ class Api::V1::UsersController < Api::V1::BaseController
                               .order(sql_cmd)
                               .page(page_params[:page])
                               .per(page_params[:page_size])
-
-    instance_variable_set(plural_resource_name, resources)
-    respond_with instance_variable_get(plural_resource_name)
+    render :json => resources
+    #instance_variable_set(plural_resource_name, resources)
+    #respond_with instance_variable_get(plural_resource_name)
   end
   
   # Override

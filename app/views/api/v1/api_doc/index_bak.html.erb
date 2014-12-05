@@ -1,34 +1,5 @@
 <h1 id="yelpio-api">Yelpio API</h1>
 <p>Yelpio API is a <em>short api</em> service using the YELP data set and prediction IO system.</p>
-<pre><code>users_path                  GET     /users(.:format)                        users#index
-user_path                   GET     /users/:id(.:format)                    users#show
-root_path                   GET     /users#index
-api_apps_path               POST    /api/apps(.:format)                     api/apps#create
-api_v1_api_doc_index_path   GET     /api/v1/api_doc/index(.:format)         api/v1/api_doc#index
-api_v1_users_path           GET     /api/v1/users(.:format)                 api/v1/users#index
-                            POST    /api/v1/users(.:format)                 api/v1/users#create
-new_api_v1_user_path        GET     /api/v1/users/new(.:format)             api/v1/users#new
-edit_api_v1_user_path       GET     /api/v1/users/:id/edit(.:format)        api/v1/users#edit
-api_v1_user_path            GET     /api/v1/users/:id(.:format)             api/v1/users#show
-                            PATCH   /api/v1/users/:id(.:format)             api/v1/users#update
-                            PUT     /api/v1/users/:id(.:format)             api/v1/users#update
-                            DELETE  /api/v1/users/:id(.:format)             api/v1/users#destroy
-api_v1_businesses_path      GET     /api/v1/businesses(.:format)            api/v1/businesses#index
-                            POST    /api/v1/businesses(.:format)            api/v1/businesses#create
-new_api_v1_business_path    GET     /api/v1/businesses/new(.:format)        api/v1/businesses#new
-edit_api_v1_business_path   GET     /api/v1/businesses/:id/edit(.:format)   api/v1/businesses#edit
-api_v1_business_path        GET     /api/v1/businesses/:id(.:format)        api/v1/businesses#show
-                            PATCH   /api/v1/businesses/:id(.:format)        api/v1/businesses#update
-                            PUT     /api/v1/businesses/:id(.:format)        api/v1/businesses#update
-                            DELETE  /api/v1/businesses/:id(.:format)        api/v1/businesses#destroy
-api_v1_reviews_path         GET     /api/v1/reviews(.:format)               api/v1/reviews#index
-                            POST    /api/v1/reviews(.:format)               api/v1/reviews#create
-new_api_v1_review_path      GET     /api/v1/reviews/new(.:format)           api/v1/reviews#new
-edit_api_v1_review_path     GET     /api/v1/reviews/:id/edit(.:format)      api/v1/reviews#edit
-api_v1_review_path          GET     /api/v1/reviews/:id(.:format)           api/v1/reviews#show
-                            PATCH   /api/v1/reviews/:id(.:format)           api/v1/reviews#update
-                            PUT     /api/v1/reviews/:id(.:format)           api/v1/reviews#update
-                            DELETE  /api/v1/reviews/:id(.:format)           api/v1/reviews#destroy</code></pre>
 <h2 id="api-server">API server</h2>
 <ul>
 <li><a href="http://yelpio.hongo.wide.ad.jp/api/v1/api_doc/index">http://yelpio.hongo.wide.ad.jp/api/v1/api_doc/index</a></li>
@@ -169,15 +140,7 @@ end</code></pre>
 <li><p>Response null JSON string if the user already existed in the database</p></li>
 </ul>
 <h2 id="user-usersidyelp_user_id">User [/users/{id}&amp;{yelp_user_id}]</h2>
-<p>A single user object with all its details </p>
-<h3> List of params </h3>
-<ul>
-<li>id <em>{value: number}</em> <code>id</code> of the user to perform action. </li> 
-<li> yelp_user_id <em>{value: string}</em> … Previous defined user_id in YELP_TRAINING_DATA_ </li>
-<li>method <em>{value: ‘predict’}</em>… Get the predicted result from PIO event server</li>
- <li>num <em>{number, default=10}</em>… Number of the predicted result from PIO event server</li>
-</ul>
-
+<p>A single user object with all its details ### List of params + id (number, <code>1</code>) … Numeric <code>id</code> of the user to perform action. + yelp_user_id (string) … Previous defined user_id in YELP_TRAINING_DATA_ + method (string, ‘predict’)… Get the predicted result from PIO event server + num (number, default=10)… Number of the predicted result from PIO event server</p>
 <h3 id="retrieve-user-from-id-or-yelp_user_id-get">Retrieve user from id or yelp_user_id [GET]</h3>
 <ul>
 <li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/users/6279”</li>
@@ -211,9 +174,9 @@ end</code></pre>
 <li>sort <em>{value: “id”, “name”, “created_at”, “updated_at”, default = “id”}</em></li>
 <li>order <em>{value: “ASC”, “DESC”, default = “DESC”}</em></li>
 <li>page <em>{value: number, default=1}</em>, page_size <em>{value: number, default=25}</em></li>
-<li>cagegorize <em>{value: string, ex: “restaurant”}</em></li>
-<li>location <em>{value: string, ex: “Scottsdale,AZ”}</em></li>
-<li>radius <em>{value: float number in km, default=10}</em></li>
+<li>cagegorize *{value: string, ex: “restaurant”}</li>
+<li>location *{value: string, ex: “Scottsdale,AZ”}</li>
+<li>radius *{value: float number in km, default=10}</li>
 <li>longitude <em>{value: float number}</em></li>
 <li>latitude <em>{value: float number}</em></li>
 </ul>
@@ -239,13 +202,7 @@ end</code></pre>
 <li><p>Top 10 nearest restaurant: curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/businesses?categorize=restaurant&amp;radius=5&amp;location=Scottsdale,AZ&amp;page_size=10”</p></li>
 </ul>
 <h2 id="business-businessesidyelp_business_id">Business [/businesses/{id}&amp;{yelp_business_id}]</h2>
-<p>A single user object with all its details </p>
-<h3> List of params </h3>
-<ul>
-<li>id <em>{value: number}</em> <code>id</code> of the user to perform action. </li> 
-<li> yelp_business_id <em>{value: string}</em> … Previous defined business_id in YELP_TRAINING_DATA_ </li>
-</ul>
-
+<p>A single user object with all its details ### List of params + id (number, <code>1</code>) … Numeric <code>id</code> of the user to perform action. + yelp_business_id (string) … Previous defined business_id in YELP_TRAINING_DATA_</p>
 <h3 id="retrieve-business-from-id-or-yelp_user_id-get">Retrieve business from id or yelp_user_id [GET]</h3>
 <ul>
 <li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/businesses/1113”</li>
@@ -273,15 +230,6 @@ end</code></pre>
 <li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/reviews?sort=business_id&amp;page=1&amp;page_size=10”</li>
 <li>Response 200 (application/json)</li>
 </ul>
-<h3 id="retrieve-reviews-from-reviews_id">Retrieve reviews from reviews_id, yelp_business_id or yelp_user_id [GET]</h3>
-<ul>
-<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/reviews?id=11133”</li>
-<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/reviews?yelp_business_id=rncjoVoEFUJGCUoC1JgnUA”</li>
-<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/reviews?business_id=1234”</li>
-<li><p>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/reviews?yelp_user_id=PahwPVfd6BkDyO8KCFEoWw&amp;yelp_business_id=3jqOv6re-xPYOg7srmi7tg”</p></li>
-<li><p>Response 200 (application/json)</p></li>
-</ul>
-
 <h3 id="create-new-review-post">Create new review [POST]</h3>
 <ul>
 <li>Require parameter: yelp_business_id, yelp_user_id, stars</li>
@@ -293,9 +241,12 @@ end</code></pre>
 <li><p>Response null JSON string if the user already existed in the database</p></li>
 </ul>
 <h2 id="reviews-reviewsid">Reviews [/reviews/{id}]</h2>
-<p>A single user object with all its details</p>
-<h3 id="retrieve-reviews-from-reviews_id">Retrieve reviews from reviews_id, yelp_business_id or yelp_user_id [GET]</h3>
+<p>A single user object with all its details ### List of params + id (number, <code>1</code>) … Numeric <code>id</code> of the user to perform action. + business_id + yelp_business_id (string) … Previous defined business_id in YELP_TRAINING_DATA_ + user_id + yelp_user_id</p>
+<h3 id="retrieve-reviews-from-reviews_id-yelp_business_id-or-yelp_user_id-get">Retrieve reviews from reviews_id, yelp_business_id or yelp_user_id [GET]</h3>
 <ul>
 <li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/reviews/11133”</li>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/reviews?yelp_business_id=rncjoVoEFUJGCUoC1JgnUA”</li>
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/reviews?business_id=1234”</li>
+<li><p>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/reviews?yelp_user_id=PahwPVfd6BkDyO8KCFEoWw&amp;yelp_business_id=3jqOv6re-xPYOg7srmi7tg”</p></li>
 <li><p>Response 200 (application/json)</p></li>
 </ul>

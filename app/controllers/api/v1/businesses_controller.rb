@@ -46,8 +46,9 @@ class Api::V1::BusinessesController < Api::V1::BaseController
                          .page(page_params[:page])
                          .per(page_params[:page_size])
     
-    instance_variable_set(plural_resource_name, resources)
-    respond_with instance_variable_get(plural_resource_name)
+    render :json => resources
+    #instance_variable_set(plural_resource_name, resources)
+    #respond_with instance_variable_get(plural_resource_name)
   end
   
   def show
