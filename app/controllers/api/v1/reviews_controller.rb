@@ -69,13 +69,31 @@ class Api::V1::ReviewsController < Api::V1::BaseController
         save_flag = true
       end
      end
-     if save_flag == true
+    end
+    if save_flag == true
+      sent = send_review(@review)
+       #retrain data
+#       if sent == true
+#         port = ""
+#         catego = page_params[:categorize].downcase
+#         if catego == "restaurant" || catego == "restaurants" || catego == "food" || catego == "foods"
+#           port = " --port 8800"
+#           engine_dir = "cd " + ENV['ENGINE_DIR_YELP']
+#         elsif
+#           engine_dir = "cd " + ENV['ENGINE_DIR']
+#         end
+#         cmd1 = engine_dir + " && $PIO_HOME/bin/pio train"
+#         system( cmd1 )
+#         cmd2 = engine_dir + " && $PIO_HOME/bin/pio deploy" + port + " &"
+#         system( cmd2 )
+         # Waint more 5s
+ #        sleep(10)
+ #      end
        render :json => @review
-     else
+    else
        render :json => {}
        #render json: get_resource.errors, status: :unprocessable_entity
-     end
-   end 
+    end
   end
   # Update /api/v1/1
   def update
@@ -95,6 +113,51 @@ class Api::V1::ReviewsController < Api::V1::BaseController
     end
     
     def page_params
-      params.permit(:page, :page_size, :sort, :order)
+      params.permit(:page, :page_size, :sort, :order, :categorize)
     end
+
+    def send_review(review)
+      sent = false
+      if page_params[:categorize]
+       catego = page_params[:categorize].downcase
+      elsif
+       catego = ""
+      end
+      res_flag = ( catego == "restaurant" || catego == "restaurants" || catego == "food" || catego == "foods")
+      if res_flag == true
+        client_yelp = PredictionIO::EventClient.new(ENV['PIO_APP_KEY2'], ENV['PIO_EVENT_SERVER_URL'])
+      end
+      client = PredictionIO::EventClient.new(ENV['PIO_APP_KEY'], ENV['PIO_EVENT_SERVER_URL'])
+      # Only send reviews that have a valid user and business
+      if review.user && review.business
+        client.create_event(
+	  'rate',
+	  'user',
+	  review.user.id, {
+	    'targetEntityType' => 'item',
+	    'targetEntityId'   => review.business.id,
+	    'eventTime'        => review.created_at,
+            'properties'       => {'rating' => review.stars} 
+	  }
+	)
+        if res_flag == true
+         client_yelp.create_event(
+          'rate',
+          'user',
+          review.user.id, {
+            'targetEntityType' => 'item',
+            'targetEntityId'   => review.business.id,
+            'eventTime'        => review.created_at,
+            'properties'       => {'rating' => review.stars}
+          }
+        )
+        end
+        puts "Sent review #{review.id} from user #{review.user.id} of business #{review.business.id} PredictionIO."
+        sent = true
+      end
+      sent
+      rescue => e
+        sent
+        #puts "Error! Review #{review.id} failed. #{e.message}"
+   end
 end
