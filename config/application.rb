@@ -8,6 +8,12 @@ Bundler.require(*Rails.groups)
 
 module PredictionioRails
   class Application < Rails::Application
+    config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
+    config.assets.paths << "#{Rails}/app/assets/fonts"
+    config.assets.paths << "#{Rails}/app/assets/images"
+    
+    # Precompile additional assets
+    config.assets.precompile += %w( .svg .eot .woff .ttf ) 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

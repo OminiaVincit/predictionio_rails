@@ -40,9 +40,10 @@ class Api::V1::ReviewsController < Api::V1::BaseController
   def create
    yelp_business_id = resource_params[:yelp_business_id]
    yelp_user_id = resource_params[:yelp_user_id]
-   stars = resource_params[:stars]
+   stars = resource_params[:stars].to_f
    content = resource_params[:content]
    save_flag = false
+      
    if yelp_business_id && yelp_user_id && stars
      #  User and business must exist in database
      @user = User.where(yelp_user_id: yelp_user_id).first
@@ -86,7 +87,7 @@ class Api::V1::ReviewsController < Api::V1::BaseController
 #         system( cmd1 )
 #         cmd2 = engine_dir + " && $PIO_HOME/bin/pio deploy" + port + " &"
 #         system( cmd2 )
-         # Waint more 5s
+         # Wait more 5s
  #        sleep(10)
  #      end
        render :json => @review
@@ -98,6 +99,10 @@ class Api::V1::ReviewsController < Api::V1::BaseController
   # Update /api/v1/1
   def update
     
+  end
+  
+  def new
+  	
   end
   
   private
@@ -131,15 +136,15 @@ class Api::V1::ReviewsController < Api::V1::BaseController
       # Only send reviews that have a valid user and business
       if review.user && review.business
         client.create_event(
-	  'rate',
-	  'user',
-	  review.user.id, {
-	    'targetEntityType' => 'item',
-	    'targetEntityId'   => review.business.id,
-	    'eventTime'        => review.created_at,
-            'properties'       => {'rating' => review.stars} 
-	  }
-	)
+	  		'rate',
+	  		'user',
+	  		review.user.id, {
+	    		'targetEntityType' => 'item',
+	    		'targetEntityId'   => review.business.id,
+	    		'eventTime'        => review.created_at,
+        		'properties'       => {'rating' => review.stars} 
+	  		}
+		)
         if res_flag == true
          client_yelp.create_event(
           'rate',

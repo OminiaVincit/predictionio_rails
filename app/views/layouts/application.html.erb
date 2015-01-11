@@ -1,13 +1,36 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Yelp-PIO  Rails Application</title>
-  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <%= csrf_meta_tags %>
-</head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/prettyPhoto.css" rel="stylesheet">
+    <link href="css/price-range.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+	<link href="css/main.css" rel="stylesheet">
+	<link href="css/responsive.css" rel="stylesheet">
+	
+	<%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag :defaults %>
+  
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->       
+    <link rel="shortcut icon" href="images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+</head><!--/head-->
+
 <body>
+<!--
   <div class="jumbotron">
     <div class="container">
       <header>
@@ -15,18 +38,326 @@
           <iframe class="pull-right" src="http://ghbtns.com/github-btn.html?user=OminiaVincit&repo=predictionio_rails&type=fork&count=true&size=large"
             allowtransparency="true" frameborder="0" scrolling="0" width="170" height="30"></iframe>
         <% end %>
-        <h1><a href="<%= root_path %>">PredictionIO</a></h1>
-        <h2>Facebook Open Academy Yelp-PIO Rails Applications</h2> 
+        <h1><a href="<%= root_path %>">YELPIO</a></h1>
+        <h2>Restaurant Recommendation Service</h2> 
      </header>
     </div>
   </div>
+  -->
+  
+  <header id="header"><!--header-->
+		<div class="header_top"><!--header_top-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="contactinfo">
+							<ul class="nav nav-pills">
+								<li><a href="http://www.hongo.wide.ad.jp/" target="new"><i class="fa fa-plus-square"></i> Elab</a></li>
+								<li><a href="mailto:zoro@hongo.wide.ad.jp?subject=YELPIO-Navi"><i class="fa fa-envelope"></i> zoro@hongo.wide.ad.jp</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="social-icons pull-right">
+							<ul class="nav navbar-nav">
+								<li><a href="https://www.facebook.com/ha.phuong.5437923" target="new"><i class="fa fa-facebook"></i></a></li>
+								<li><a href="https://twitter.com/k09ht" target="new"><i class="fa fa-twitter"></i></a></li>
+								<li><a href=""><i class="fa fa-linkedin"></i></a></li>
+								<li><a href=""><i class="fa fa-dribbble"></i></a></li>
+								<li><a href="https://www.google.com/+TranHoanSmallStories" target="new"><i class="fa fa-google-plus"></i></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/header_top-->
+				
+		<div class="header-middle"><!--header-middle-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="logo pull-left">
+							<a href="/welcome/index.html"><%= image_tag 'home/yelpio_logo.png', :alt => 'logo' %></a>
+						</div>
+						<div class="btn-group pull-right">
+							<div class="btn-group">
+								<button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
+									USA
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li><a href="#">JAPAN</a></li>
+									<li><a href="#">VIETNAM</a></li>
+								</ul>
+							</div>
+							
+							<div class="btn-group">
+								<button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
+									ENGLISH
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li><a href="#">JAPANESE</a></li>
+									<li><a href="#">VIETNAMESE</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="shop-menu pull-right">
+							<ul class="nav navbar-nav">
+								<% if user_signed_in? %>
+									<li><a href="/users/<%=current_user.id%>"><i class="fa fa-star"></i> Wishlist</a></li>
+									<li><a href="<%=edit_user_registration_path%>"><i class="fa fa-user"></i> Edit  <strong><%= current_user.name %></strong> profile</a></li>
+									<li><a href="<%=destroy_user_session_path%>"><i class="fa fa-unlock"></i> Logout</a></li>
+								<% else %>
+									<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
+									<li><a href="<%=new_user_session_path%>"><i class="fa fa-lock"></i> Login</a></li>
+									<li><a href="/users/sign_up"><i class="fa fa-lock"></i> Sign up</a></li>
+								<% end %>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/header-middle-->
+	
+		<div class="header-bottom"><!--header-bottom-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-9">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+						</div>
+						<div class="mainmenu pull-left">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="/welcome/index.html" class="active">Home</a></li>
+								<li class="dropdown"><a href="#">Service<i class="fa fa-angle-down"></i></a>
+                                    <ul role="menu" class="sub-menu">
+                                        <li><a href="#">Businesses</a></li>
+										<li><a href="#">Delivery</a></li> 
+                                    </ul>
+                                </li> 
+								<li class="dropdown"><a href="#">Develop<i class="fa fa-angle-down"></i></a>
+                                    <ul role="menu" class="sub-menu">
+                                    	<li><a href="http://yelpio.hongo.wide.ad.jp/api/v1/api_doc/index" target="new">API</a></li>
+                                        <li><a href="https://github.com/OminiaVincit/predictionio_rails" target="new">Github</a></li>
+										<li><a href="http://prediction.io/" target="new">Prediction IO</a></li>
+										<li><a href="http://www.yelp.com/developers" target="new">Yelp API</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown"><a href="#">Android app<i class="fa fa-angle-down"></i></a>
+                                    <ul role="menu" class="sub-menu">
+                                    	<li><a href="https://github.com/OminiaVincit/YELPIO_demo2" target="new">Github</a></li>
+										<li><a href="https://www.youtube.com/watch?v=L4xVMveWIes" target="new">Youtube</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown"><a href="#">Contact<i class="fa fa-angle-down"></i></a>
+                                    <ul role="menu" class="sub-menu">
+                                    	<li><a href="mailto:zoro@hongo.wide.ad.jp?subject=YELPIO-Navi">Zoro</a></li>
+                                        <li><a href="http://www.hongo.wide.ad.jp" target="new">Elab</a></li>
+                                        <li><a href="http://enpit-cloud.ci.i.u-tokyo.ac.jp/index.html" target="new">enPit Cloud</a></li>
+										<li><a href="http://prediction.io/" target="new">Prediction IO</a></li>
+                                    </ul>
+                                </li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="search_box pull-right">
+							<input type="text" placeholder="Search"/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/header-bottom-->
+	</header><!--/header-->
+
+   <% if notice %>
+  	<p class="alert alert-notice"><%= notice %></p>
+  <% end %>
+  <% if alert %>
+  	<p class="alert alert-error"><%= alert %></p>
+  <% end %>
+	
   <div class="container">
     <%= yield %>
   </div>
+  
   <footer>
+    	<footer id="footer"><!--Footer-->
+		<div class="footer-top">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-2">
+						<div class="companyinfo">
+							<a href="/" style="text-decoration: none"><h2><span>YELPIO</span>-navi</h2></a>
+							<p>Best recommendations for your request. Based on PredictionIO framework. Facebook Open Academy October, 2014.</p>
+						</div>
+					</div>
+					<div class="col-sm-7">
+						<div class="col-sm-3">
+							<div class="video-gallery text-center">
+								<a href="http://enpit-cloud.ci.i.u-tokyo.ac.jp/index.html">
+									<div class="iframe-img">
+										<%= image_tag 'home/enPiT-cloud.png', :alt => 'iframe1' %>
+									</div>
+									<div class="overlay-icon">
+										<i class="fa fa-play-circle-o"></i>
+									</div>
+								</a>
+								<p>enPiT Cloud</p>
+								<h2>Winter 2014</h2>
+							</div>
+						</div>
+						
+						<div class="col-sm-3">
+							<div class="video-gallery text-center">
+								<a href="https://www.facebook.com/groups/1531657393738463/">
+									<div class="iframe-img">
+									    <%= image_tag 'home/facebook-open.jpg', :alt => 'iframe2' %>
+									</div>
+									<div class="overlay-icon">
+										<i class="fa fa-play-circle-o"></i>
+									</div>
+								</a>
+								<p>Open Academy</p>
+								<h2>OCT 2014</h2>
+							</div>
+						</div>
+						
+						<div class="col-sm-3">
+							<div class="video-gallery text-center">
+								<a href="https://www.facebook.com/groups/356515841181355/">
+									<div class="iframe-img">
+										 <%= image_tag 'home/prediction-team.jpg', :alt => 'iframe3' %>
+									</div>
+									<div class="overlay-icon">
+										<i class="fa fa-play-circle-o"></i>
+									</div>
+								</a>
+								<p>PredictionIO Team</p>
+								<h2>OCT 2014</h2>
+							</div>
+						</div>
+						
+						<div class="col-sm-3">
+							<div class="video-gallery text-center">
+								<a href="#">
+									<div class="iframe-img">
+										<%= image_tag 'home/yelpio-team.png', :alt => 'iframe4' %>
+									</div>
+									<div class="overlay-icon">
+										<i class="fa fa-play-circle-o"></i>
+									</div>
+								</a>
+								<p>YELPIO Team</p>
+								<h2>Winter 2014</h2>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="address">
+						    <%= image_tag 'home/map.png', :alt => 'map' %>
+							<p>1 Hacker Way, Menlo Park, CA 94025(California)</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="footer-widget">
+			<div class="container">
+				<div class="row">
+				   <div class="col-sm-2">
+						<div class="single-widget">
+							<h2>Quick Navigation</h2>
+							<ul class="nav nav-pills nav-stacked">
+								<li><a href="/welcome/index.html">All</a></li>
+								<li><a href="/welcome/index.html?categorize=restaurant">Restaurant & Food</a></li>
+								<li><a href="/welcome/index.html?categorize=education">Education</a></li>
+								<li><a href="/welcome/index.html?categorize=entertainment">Entertainment</a></li>
+								<li><a href="/welcome/index.html?categorize=shopping">Shopping</a></li>
+								<li><a href="/welcome/index.html?categorize=hotel">Hotel</a></li>
+								<li><a href="/welcome/index.html?categorize=beauty">Beauty</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<div class="single-widget">
+							<h2>Service</h2>
+							<ul class="nav nav-pills nav-stacked">
+								<li><a href="#">Online Help</a></li>
+								<li><a href="#">Contact Us</a></li>
+								<li><a href="#">Change Location</a></li>
+								<li><a href="#">FAQ’s</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<div class="single-widget">
+							<h2>Policies</h2>
+							<ul class="nav nav-pills nav-stacked">
+								<li><a href="#">Terms of Use</a></li>
+								<li><a href="#">Privacy Policy</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<div class="single-widget">
+							<h2>About YELPIO</h2>
+							<ul class="nav nav-pills nav-stacked">
+								<li><a href="#">Project Information</a></li>
+								<li><a href="#">Location</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-3 col-sm-offset-1">
+						<div class="single-widget">
+							<h2>Get more about YELPIO</h2>
+							<form action="#" class="searchform">
+								<input type="text" placeholder="Your email address" />
+								<button type="submit" class="btn btn-default"><i class="fa fa-arrow-circle-o-right"></i></button>
+								<p>Get the most recent updates from <br />our site and be updated your self...</p>
+							</form>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		
+		<div class="footer-bottom">
+			<div class="container">
+				<div class="row">
+					<p class="pull-left">Copyright © 2014 yelpio.hongo.wide.ad.jp</p>
+					<p class="pull-right">See more at <span><a target="_blank" href="http://prediction.io/">Prediction IO</a></span></p>
+				</div>
+			</div>
+		</div>
+		
+	</footer><!--/Footer-->
+	
+
+  
+    <script src="js/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.scrollUp.min.js"></script>
+	<script src="js/price-range.js"></script>
+    <script src="js/jquery.prettyPhoto.js"></script>
+    <script src="js/main.js"></script>
+    <a id="scrollUp" href="#top" style="position: fixed; z-index: 2147483647;">
+    	<i class="fa fa-angle-up">
+    	</i>
+    </a>
     <div class="container">
       <p class="text-center">
-        Back to <a href="<%= root_path %>">PredictionIO</a>
+        Back to <a href="<%= root_path %>">YELPIO</a>
       </p>
     </div>
   </footer>

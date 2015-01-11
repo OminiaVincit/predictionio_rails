@@ -14,3 +14,14 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap-sprockets
+//= require bootstrap
+//= require bootstrap.min
+//= require main
+//= require price-range
+//= require jquery.scrollUp.min
+//= require jquery.prettyPhoto
+//= require html5shiv
+//= require contact
+//= require gmaps
+//= require "welcome.js.coffee"
+//= require jquery-star-rating

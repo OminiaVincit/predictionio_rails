@@ -35,6 +35,8 @@ gem 'pg'
 
 # Bootstrap
 gem 'bootstrap-sass'
+gem 'less-rails'
+gem 'twitter-bootstrap-rails'
 
 # PredictionIO
 gem 'predictionio'
@@ -46,3 +48,10 @@ gem 'unicorn'
 # For kaminari
 gem 'kaminari'
 gem 'geocoder'
+
+gem 'sprockets'
+
+gem "font-awesome-rails"
+gem 'yelp', require: 'yelp'
+gem 'devise'
+gem 'jquery-star-rating-rails'

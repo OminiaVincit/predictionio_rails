@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Business Details | YELPIO-Navi</title>
+</head><!--/head-->
+
+<body>
+	
+	<section>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="left-sidebar">
+						<h2>Category</h2>
+						<div class="panel-group category-products" id="accordian"><!--category-productsr-->
+						    <div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="/welcome/index.html">All</a></h4>
+								</div>
+							</div>
+							
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="/welcome/index.html?categorize=restaurant">Restaurants & Foods <i class="fa fa-users"></i></a></h4>
+								</div>
+							</div>
+							
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="/welcome/index.html?categorize=education">Education <i class="fa fa-book"></i></a></h4>
+								</div>
+							</div>
+							
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="/welcome/index.html?categorize=entertainment">Entertainments <i class="fa fa-music"></i></a></h4>
+								</div>
+							</div>
+							
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="/welcome/index.html?categorize=shopping">Shopping <i class="fa fa-shopping-cart"></i></a></h4>
+								</div>
+							</div>
+							
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="/welcome/index.html?categorize=hotel">Hotels <i class="fa fa-briefcase"></i></a></h4>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="/welcome/index.html?categorize=beauty">Beauty <i class="fa fa-female"></i></a></h4>
+								</div>
+							</div>
+						</div><!--/category-products-->
+					
+						<div class="brands_products"><!--brands_products-->
+							<h2>Users</h2>
+							<div class="brands-name">
+								<ul class="nav nav-pills nav-stacked">
+								  <% @users.each do |user| %>
+								    <% linkuser = user.name + " (" + user.reviews.size.to_s + ")" %>
+									<li><%= link_to linkuser, user %></li>
+								 <% end %>
+								</ul>
+							</div>
+						</div><!--/brands_products-->
+						
+					</div>
+				</div>
+				
+				<div class="col-sm-9 padding-right">
+					<div class="product-details"><!--product-details-->
+						<div class="col-sm-5">
+							<div class="view-product">
+								<%= image_tag 'product-details/1.jpg', :alt => ''%>
+								<h3>ZOOM</h3>
+							</div>
+							<div id="similar-product" class="carousel slide" data-ride="carousel">
+								
+								  <!-- Wrapper for slides -->
+								    <div class="carousel-inner">
+										<div class="item active">
+										  <%= image_tag 'product-details/similar1.jpg', :alt => ''%>
+										  <%= image_tag 'product-details/similar2.jpg', :alt => ''%>
+										  <%= image_tag 'product-details/similar3.jpg', :alt => ''%>
+										</div>
+										<div class="item">
+										  <%= image_tag 'product-details/similar1.jpg', :alt => ''%>
+										  <%= image_tag 'product-details/similar2.jpg', :alt => ''%>
+										  <%= image_tag 'product-details/similar3.jpg', :alt => ''%>
+										</div>
+										<div class="item">
+										  <%= image_tag 'product-details/similar1.jpg', :alt => ''%>
+										  <%= image_tag 'product-details/similar2.jpg', :alt => ''%>
+										  <%= image_tag 'product-details/similar3.jpg', :alt => ''%>
+										</div>
+										
+									</div>
+
+								  <!-- Controls -->
+								  <a class="left item-control" href="#similar-product" data-slide="prev">
+									<i class="fa fa-angle-left"></i>
+								  </a>
+								  <a class="right item-control" href="#similar-product" data-slide="next">
+									<i class="fa fa-angle-right"></i>
+								  </a>
+							</div>
+
+						</div>
+						<div class="col-sm-7">
+							<div class="product-information"><!--/product-information-->
+								
+								<a href="<%=@business.yelp_url%>" target="new" style="text-decoration: none"><h2><div style="color: #FE980F"><%= @business.name %></div></h2></a>
+								<p><b>Yelp Business ID:</b>	<%= @business.yelp_real_id %></p>
+								<p><b>Address:</b>	<%= @business.full_address %></p>
+								<span>
+									<span>
+										<% index = 1 %>
+										<% while index <= @business.stars do index = index + 1 %>
+											<i class="fa fa-star"></i>
+										<% end %>
+										<% if @business.stars - index + 1 > 0 %>
+											<i class="fa fa-star-half-o"></i>
+								  			<% index = index + 1 %>
+								  		<% end %>
+								  		<% while index <= 5  do index = index + 1 %>
+											<i class="fa fa-star-o"></i>
+										<% end %>
+									</span>
+									<button type="button" class="btn btn-fefault cart">
+										<i class="fa fa-star"></i>
+										Add to wishlist
+									</button>
+								</span>
+								<p><b>Availability:</b></p>
+								<p><b>Condition:</b></p>
+								<p><b>Categories:</b> <%= @business.categories%></p>
+								<a href=""><%= image_tag 'product-details/share.png', :class => 'share img-responsive', :alt => ''%></a>
+							</div><!--/product-information-->
+						</div>
+					</div><!--/product-details-->
+					
+					<div class="category-tab shop-details-tab"><!--category-tab-->
+						<div class="col-sm-12">
+							<ul class="nav nav-tabs">
+								<li><a href="#details" data-toggle="tab">Details</a></li>
+								<li><a href="#businessprofile" data-toggle="tab">Business Profile</a></li>
+								<li><a href="#photos" data-toggle="tab">Photos</a></li>
+								<li class="active"><a href="#reviews" data-toggle="tab">Reviews (<%=@business.reviews_count%>)</a></li>
+							</ul>
+						</div>
+						<div class="tab-content">
+							<div class="tab-pane fade" id="details" >
+								<div class="col-sm-3">
+									<div class="product-image-wrapper">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<%= image_tag 'home/restaurant.jpg', :alt => '' %>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="product-image-wrapper">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<%= image_tag 'home/restaurant.jpg', :alt => '' %>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="product-image-wrapper">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<%= image_tag 'home/restaurant.jpg', :alt => '' %>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="product-image-wrapper">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<%= image_tag 'home/restaurant.jpg', :alt => '' %>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="tab-pane fade" id="businessprofile" >
+								<div class="col-sm-3">
+									<div class="product-image-wrapper">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<%= image_tag 'home/restaurant.jpg', :alt => '' %>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="product-image-wrapper">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<%= image_tag 'home/restaurant.jpg', :alt => '' %>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="product-image-wrapper">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<%= image_tag 'home/restaurant.jpg', :alt => '' %>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="product-image-wrapper">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<%= image_tag 'home/restaurant.jpg', :alt => '' %>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="tab-pane fade" id="photos" >
+								<div class="col-sm-3">
+									<div class="product-image-wrapper">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<%= image_tag 'home/restaurant.jpg', :alt => '' %>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="product-image-wrapper">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<%= image_tag 'home/restaurant.jpg', :alt => '' %>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="product-image-wrapper">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<%= image_tag 'home/restaurant.jpg', :alt => '' %>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="product-image-wrapper">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<%= image_tag 'home/restaurant.jpg', :alt => '' %>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="tab-pane fade active in" id="reviews" >
+								<div class="col-sm-12">
+									<a href="/welcome/login.html" >
+								 		<button type="button" class="btn btn-default pull-right">
+											Write Your Review
+										</button>
+									</a>
+									 <% @reviews.each do |review| %>
+									 	<% user = review.user %>
+									 	<% if user %> 
+											<ul>
+												<li><a href="/users/<%=user.id%>"><i class="fa fa-user"></i><%= user.name%></a></li>
+												<li><a href=""><i class="fa fa-clock-o"></i><%= review.updated_at.to_time.strftime("%I:%M%p") %></a></li>
+												<li><a href=""><i class="fa fa-calendar-o"></i><%= review.updated_at.to_date %></a></li>
+											</ul>
+											<div style="color: #FE980F">
+												<% index = 1 %>
+												<% while index <= review.stars do index = index + 1 %>
+													<i class="fa fa-star"></i>
+												<% end %>
+												<% if review.stars - index + 1 > 0 %>
+													<i class="fa fa-star-half-o"></i>
+								  					<% index = index + 1 %>
+								  				<% end %>
+								  				<% while index <= 5  do index = index + 1 %>
+													<i class="fa fa-star-o"></i>
+												<% end %>
+											</div>
+											<p><%= review.content%></p>
+											<p> </p>
+										<% end %>
+								 	<% end %>
+								 	<a href="/welcome/login.html" >
+								 		<button type="button" class="btn btn-default pull-right">
+											Write Your Review
+										</button>
+									</a>
+								</div>
+							</div>
+							
+						</div>
+					</div><!--/category-tab-->
+					
+					<div class="recommended_items"><!--recommended_items-->
+						<h2 class="title text-center">related businesses</h2>
+						
+						<div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+							<div class="carousel-inner">
+								<div class="item active">
+									<% for i in 0..2 %>
+									  <% business=@related_items[i]%>
+									  <div class="col-sm-4">
+										<div class="product-image-wrapper">
+											<div class="single-products">
+												<div class="productinfo text-center">
+														<a href="/welcome/<%=business.yelp_business_id%>" target="new"><%= image_tag 'home/recommend1.jpg', :alt => '' %></a>
+														<a href="/welcome/<%=business.yelp_business_id%>" target="new" style="text-decoration: none"><h2><%= business.name %></h2></a>
+														<h4><%= business.reviews.size.to_s + " reviews" %></h4>
+														<star>
+											 			  <span>
+											    			<% index = 1 %>
+											    			<% while index <= business.stars do index = index + 1 %>
+												  				<i class="fa fa-star"></i>
+															<% end %>
+															<% if business.stars - index + 1 > 0 %>
+												 		 		<i class="fa fa-star-half-o"></i>
+								  				  				<% index = index + 1 %>
+								  							<% end %>
+								  							<% while index <= 5  do index = index + 1 %>
+												  				<i class="fa fa-star-o"></i>
+															<% end %>
+											 			  </span>
+														</star>
+												</div>
+											</div>
+										</div>
+									</div>
+									<% end %>
+								</div>
+								
+								<div class="item">
+									<% for i in 3..5 %>
+									  <% business=@related_items[i]%>
+									  <div class="col-sm-4">
+										<div class="product-image-wrapper">
+											<div class="single-products">
+												<div class="productinfo text-center">
+														<a href="/welcome/<%=business.yelp_business_id%>" target="new"><%= image_tag 'home/recommend1.jpg', :alt => '' %></a>
+														<a href="/welcome/<%=business.yelp_business_id%>" target="new" style="text-decoration: none"><h2><%= business.name %></h2></a>
+														<h4><%= business.reviews.size.to_s + " reviews" %></h4>
+														<star>
+											 			  <span>
+											    			<% index = 1 %>
+											    			<% while index <= business.stars do index = index + 1 %>
+												  				<i class="fa fa-star"></i>
+															<% end %>
+															<% if business.stars - index + 1 > 0 %>
+												 		 		<i class="fa fa-star-half-o"></i>
+								  				  				<% index = index + 1 %>
+								  							<% end %>
+								  							<% while index <= 5  do index = index + 1 %>
+												  				<i class="fa fa-star-o"></i>
+															<% end %>
+											 			  </span>
+														</star>
+												</div>
+											</div>
+										</div>
+									  </div>
+									<% end %>
+								</div>
+							</div>
+							 <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
+								<i class="fa fa-angle-left"></i>
+							  </a>
+							  <a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
+								<i class="fa fa-angle-right"></i>
+							  </a>			
+						</div>
+					</div><!--/recommended_items-->
+					
+				</div>
+			</div>
+		</div>
+	</section>
+
+</body>
+</html>

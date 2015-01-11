@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Home | YELPIO-Navi</title>
+</head>
+
+<body>
+	
+	<section id="slider"><!--slider-->
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12">
+					<div id="slider-carousel" class="carousel slide" data-ride="carousel">
+						<ol class="carousel-indicators">
+							<li data-target="#slider-carousel" data-slide-to="0" class="active"></li>
+							<li data-target="#slider-carousel" data-slide-to="1"></li>
+							<li data-target="#slider-carousel" data-slide-to="2"></li>
+						</ol>
+						
+						<div class="carousel-inner">
+							<div class="item active">
+								<div class="col-sm-6">
+									<h1><span>YELPIO</span>-NAVI</h1>
+									<h2>Business Recommendation</h2>
+									<p>Yelp is an online urban guide that helps people find recommended destinations based on the informed opinions and reviews of a community. </p>
+									<a href="http://www.yelp.com/" target="new">
+									<button type="button" class="btn btn-default get">See more</button>
+									</a>
+								</div>
+								<div class="col-sm-6">
+								    <%= image_tag 'home/dish1.jpg', :class => 'girl img-responsive', :alt => '' %>
+								</div>
+							</div>
+							<div class="item">
+								<div class="col-sm-6">
+									<h1><span>YELPIO</span>-NAVI</h1>
+									<h2>Business Recommendation</h2>
+									<p>For this project, a restaurant (business) recommendation engine is developed using built-in Item Recommendation engine and the Yelp dataset. </p>
+									<a href="https://www.kaggle.com/c/yelp-recsys-2013/" target="new">
+									<button type="button" class="btn btn-default get">See more</button>
+									</a>
+								</div>
+								<div class="col-sm-6">
+								    <%= image_tag 'home/shopping-bags-rainbow.jpg', :class => 'girl img-responsive', :alt => '' %>
+								</div>
+							</div>
+							
+							<div class="item">
+								<div class="col-sm-6">
+									<h1><span>YELPIO</span>-NAVI</h1>
+									<h2>Business Recommendation</h2>
+									<p>YELPIO-NAVI will give you restaurant (business) recommendations based on your preferences and location. This project is developed for both web service application and native android application.</p>
+									<button type="button" class="btn btn-default get">See more</button>
+								</div>
+								<div class="col-sm-6">
+								    <%= image_tag 'home/cinema.jpg', :class => 'girl img-responsive', :alt => '' %>
+								</div>
+							</div>
+							
+						</div>
+						
+						<a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
+							<i class="fa fa-angle-left"></i>
+						</a>
+						<a href="#slider-carousel" class="right control-carousel hidden-xs" data-slide="next">
+							<i class="fa fa-angle-right"></i>
+						</a>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</section><!--/slider-->
+	
+	<section>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="left-sidebar">
+						<h2>Category</h2>
+						<div class="panel-group category-products" id="accordian"><!--category-productsr-->
+						    <div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="/welcome/index.html">All</a></h4>
+								</div>
+							</div>
+							
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="/welcome/index.html?categorize=restaurant">Restaurants & Foods <i class="fa fa-users"></i></a></h4>
+								</div>
+							</div>
+							
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="/welcome/index.html?categorize=education">Education <i class="fa fa-book"></i></a></h4>
+								</div>
+							</div>
+							
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="/welcome/index.html?categorize=entertainment">Entertainments <i class="fa fa-music"></i></a></h4>
+								</div>
+							</div>
+							
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="/welcome/index.html?categorize=shopping">Shopping <i class="fa fa-shopping-cart"></i></a></h4>
+								</div>
+							</div>
+							
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="/welcome/index.html?categorize=hotel">Hotels <i class="fa fa-briefcase"></i></a></h4>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="/welcome/index.html?categorize=beauty">Beauty <i class="fa fa-female"></i></a></h4>
+								</div>
+							</div>
+						</div><!--/category-products-->
+					
+						<div class="brands_products"><!--brands_products-->
+							<h2>Users</h2>
+							<div class="brands-name">
+								<ul class="nav nav-pills nav-stacked">
+								  <% @users.each do |user| %>
+								    <% linkuser = user.name + " (" + user.reviews.size.to_s + ")" %>
+									<li><%= link_to linkuser, user %></li>
+								 <% end %>
+								</ul>
+							</div>
+						</div><!--/brands_products-->
+					
+					</div>
+				</div>
+				
+				<div class="col-sm-9 padding-right">
+					<div class="features_items"><!--features_items-->
+						<h2 class="title text-center">Nearest <%= @catego %></h2>
+						<% @businesses.each do |business| %>
+						 <div class="col-sm-4">
+							<div class="product-image-wrapper">
+								<div class="single-products">
+										<div class="productinfo text-center">
+											<%= image_tag @bs_img_link, :alt => '' %>
+											<h2><%= business.name %></h2>
+											<h4><%= business.reviews.size.to_s + " reviews" %></h4>
+											<p><%= business.full_address %></p>
+											<p><%= business.categories %></p>
+											<star>
+											 <span>
+											    <% index = 1 %>
+											    <% while index <= business.stars do index = index + 1 %>
+												  <i class="fa fa-star"></i>
+												<% end %>
+												<% if business.stars - index + 1 > 0 %>
+												  <i class="fa fa-star-half-o"></i>
+								  				  <% index = index + 1 %>
+								  				<% end %>
+								  				<% while index <= 5  do index = index + 1 %>
+												  <i class="fa fa-star-o"></i>
+												<% end %>
+											 </span>
+											</star>
+										</div>
+										<div class="product-overlay">
+											<div class="overlay-content">
+											  <h2><%= business.name %></h2>
+											  <p><%= business.reviews.size.to_s + " reviews" %></p>
+											  <p><%= business.full_address %></p>
+											  <a href="/welcome/<%=business.yelp_business_id%>" class="btn btn-default add-to-cart"><i class="fa fa-bookmark"></i>See more</a>
+											</div>
+										</div>
+								</div>
+								<div class="choose">
+									<ul class="nav nav-pills nav-justified">
+										<% if user_signed_in? %>
+										
+											<!--
+											<input type="radio" name="kind" value="vegetable" onClick='select_kind("vegetable");'>vegetable<br>
+											<input type="radio" name="kind" value="fruit" onClick='select_kind("fruit");'>fruit<br><br>
+											Color<br><select name="color" onChange='select_color();'></select><br><br>
+											-->
+											<li><a href="/reviews?yelp_user_id=<%=current_user.yelp_user_id%>&&yelp_business_id=<%=business.yelp_business_id%>&&stars=5&&content=I like it&&categorize=<%=@catego%>"><i class="fa fa-thumbs-up"></i>LIKE</a></li>
+											<li><a href="/reviews?yelp_user_id=<%=current_user.yelp_user_id%>&&yelp_business_id=<%=business.yelp_business_id%>&&stars=0&&content=I do not like it&&categorize=<%=@catego%>"><i class="fa fa-thumbs-up"></i>DISLIKE</a></li>
+											<!--<td><%= button_to 'LIKE', {:controller => "api/v1/reviews", :action => "create", :review => @review_like.to_json, :categorize => @catego},  {:method => :post}  %></td>-->
+										<% else %>
+											<!--<li><%= button_to "LIKE", :controller => "welcome", :action => "index"%></li> 
+											<li><i class="fa fa-thumbs-up"></i><button type="button" class="btn btn-default post">LIKE</button></li>
+											<li><i class="fa fa-thumbs-down"></i><button type="button" class="btn btn-default post">UNLIKE</button></li>
+											-->
+											<li><a href="#"><i class="fa fa-thumbs-up"></i>LIKE</a></li>
+											<li><a href="#"><i class="fa fa-thumbs-down"></i>UNLIKE</a></li>
+										<% end %>
+									</ul>
+								</div>
+							</div>
+						 </div>
+  					    <% end %>
+						
+					</div><!--features_items-->
+					
+					<div class="category-tab"><!--category-tab-->
+						<div class="col-sm-12">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="#all" data-toggle="tab">All</a></li>
+								<li><a href="#restaurant" data-toggle="tab">Restaurant & Food</a></li>
+								<li><a href="#education" data-toggle="tab">Education</a></li>
+								<li><a href="#entertainment" data-toggle="tab">Entertainments</a></li>
+								<li><a href="#shopping" data-toggle="tab">Shopping</a></li>
+								<li><a href="#hotel" data-toggle="tab">Hotels</a></li>
+								<li><a href="#beauty" data-toggle="tab">Beauty</a></li>
+							</ul>
+						</div>
+						
+						<div class="tab-content">
+							<div class="tab-pane fade active in" id="all" >
+								<% @all_businesses.each do |all_business| %>
+						 			<div class="col-sm-3">
+										<div class="product-image-wrapper">
+											<div class="single-products">
+												<div class="productinfo text-center">
+													<a href="/welcome/<%=all_business.yelp_business_id%>" target="new"><%= image_tag 'home/yelpio-all.png', :alt => '' %></a>
+													<a href="/welcome/<%=all_business.yelp_business_id%>" target="new" style="text-decoration: none"><h2><%= all_business.name %></h2></a>
+													<h4><%= all_business.reviews.size.to_s + " reviews" %></h4>
+													<star>
+											 			<span>
+											    			<% index = 1 %>
+											    			<% while index <= all_business.stars do index = index + 1 %>
+												  				<i class="fa fa-star"></i>
+															<% end %>
+															<% if all_business.stars - index + 1 > 0 %>
+												 		 		<i class="fa fa-star-half-o"></i>
+								  				  				<% index = index + 1 %>
+								  							<% end %>
+								  							<% while index <= 5  do index = index + 1 %>
+												  				<i class="fa fa-star-o"></i>
+															<% end %>
+											 			</span>
+													</star>
+												</div>
+											</div>
+										</div>
+						 			</div>
+  					    		<% end %>
+							</div>
+							
+							<div class="tab-pane fade" id="restaurant" >
+								<% @restaurant_businesses.each do |restaurant_business| %>
+						 			<div class="col-sm-3">
+										<div class="product-image-wrapper">
+											<div class="single-products">
+												<div class="productinfo text-center">
+													<a href="/welcome/<%=restaurant_business.yelp_business_id%>" target="new"><%= image_tag 'home/restaurant.jpg', :alt => '' %></a>
+													<a href="/welcome/<%=restaurant_business.yelp_business_id%>" target="new" style="text-decoration: none"><h2><%= restaurant_business.name %></h2></a>
+													<h4><%= restaurant_business.reviews.size.to_s + " reviews" %></h4>
+													<star>
+											 			<span>
+											    			<% index = 1 %>
+											    			<% while index <= restaurant_business.stars do index = index + 1 %>
+												  				<i class="fa fa-star"></i>
+															<% end %>
+															<% if restaurant_business.stars - index + 1 > 0 %>
+												 		 		<i class="fa fa-star-half-o"></i>
+								  				  				<% index = index + 1 %>
+								  							<% end %>
+								  							<% while index <= 5  do index = index + 1 %>
+												  				<i class="fa fa-star-o"></i>
+															<% end %>
+											 			</span>
+													</star>
+												</div>
+											</div>
+										</div>
+						 			</div>
+  					    		<% end %>
+							</div>
+							
+							<div class="tab-pane fade" id="education" >
+								<% @education_businesses.each do |education_business| %>
+						 			<div class="col-sm-3">
+										<div class="product-image-wrapper">
+											<div class="single-products">
+												<div class="productinfo text-center">
+													<a href="/welcome/<%=education_business.yelp_business_id%>" target="new"><%= image_tag 'home/education.jpg', :alt => '' %></a>
+													<a href="/welcome/<%=education_business.yelp_business_id%>" target="new" style="text-decoration: none"><h2><%= education_business.name %></h2></a>
+													<h4><%= education_business.reviews.size.to_s + " reviews" %></h4>
+													<star>
+											 			<span>
+											    			<% index = 1 %>
+											    			<% while index <= education_business.stars do index = index + 1 %>
+												  				<i class="fa fa-star"></i>
+															<% end %>
+															<% if education_business.stars - index + 1 > 0 %>
+												 		 		<i class="fa fa-star-half-o"></i>
+								  				  				<% index = index + 1 %>
+								  							<% end %>
+								  							<% while index <= 5  do index = index + 1 %>
+												  				<i class="fa fa-star-o"></i>
+															<% end %>
+											 			</span>
+													</star>
+												</div>
+											</div>
+										</div>
+						 			</div>
+  					    		<% end %>
+							</div>
+							
+							<div class="tab-pane fade" id="entertainment" >
+								<% @entertainment_businesses.each do |entertainment_business| %>
+						 			<div class="col-sm-3">
+										<div class="product-image-wrapper">
+											<div class="single-products">
+												<div class="productinfo text-center">
+													<a href="/welcome/<%=entertainment_business.yelp_business_id%>" target="new"><%= image_tag 'home/entertainment.jpg', :alt => '' %></a>
+													<a href="/welcome/<%=entertainment_business.yelp_business_id%>" target="new" style="text-decoration: none"><h2><%= entertainment_business.name %></h2></a>
+													<h4><%= entertainment_business.reviews.size.to_s + " reviews" %></h4>
+													<star>
+											 			<span>
+											    			<% index = 1 %>
+											    			<% while index <= entertainment_business.stars do index = index + 1 %>
+												  				<i class="fa fa-star"></i>
+															<% end %>
+															<% if entertainment_business.stars - index + 1 > 0 %>
+												 		 		<i class="fa fa-star-half-o"></i>
+								  				  				<% index = index + 1 %>
+								  							<% end %>
+								  							<% while index <= 5  do index = index + 1 %>
+												  				<i class="fa fa-star-o"></i>
+															<% end %>
+											 			</span>
+													</star>
+												</div>
+											</div>
+										</div>
+						 			</div>
+  					    		<% end %>
+							</div>
+							
+							<div class="tab-pane fade" id="shopping" >
+								<% @shopping_businesses.each do |shopping_business| %>
+						 			<div class="col-sm-3">
+										<div class="product-image-wrapper">
+											<div class="single-products">
+												<div class="productinfo text-center">
+													<a href="/welcome/<%=shopping_business.yelp_business_id%>" target="new"><%= image_tag 'home/shopping.jpg', :alt => '' %></a>
+													<a href="/welcome/<%=shopping_business.yelp_business_id%>" target="new" style="text-decoration: none"><h2><%= shopping_business.name %></h2></a>
+													<h4><%= shopping_business.reviews.size.to_s + " reviews" %></h4>
+													<star>
+											 			<span>
+											    			<% index = 1 %>
+											    			<% while index <= shopping_business.stars do index = index + 1 %>
+												  				<i class="fa fa-star"></i>
+															<% end %>
+															<% if shopping_business.stars - index + 1 > 0 %>
+												 		 		<i class="fa fa-star-half-o"></i>
+								  				  				<% index = index + 1 %>
+								  							<% end %>
+								  							<% while index <= 5  do index = index + 1 %>
+												  				<i class="fa fa-star-o"></i>
+															<% end %>
+											 			</span>
+													</star>
+												</div>
+											</div>
+										</div>
+						 			</div>
+  					    		<% end %>
+							</div>
+							
+							<div class="tab-pane fade" id="hotel" >
+								<% @hotel_businesses.each do |hotel_business| %>
+						 			<div class="col-sm-3">
+										<div class="product-image-wrapper">
+											<div class="single-products">
+												<div class="productinfo text-center">
+													<a href="/welcome/<%=hotel_business.yelp_business_id%>" target="new"><%= image_tag 'home/hotel.jpg', :alt => '' %></a>
+													<a href="/welcome/<%=hotel_business.yelp_business_id%>" target="new" style="text-decoration: none"><h2><%= hotel_business.name %></h2></a>
+													<h4><%= hotel_business.reviews.size.to_s + " reviews" %></h4>
+													<star>
+											 			<span>
+											    			<% index = 1 %>
+											    			<% while index <= hotel_business.stars do index = index + 1 %>
+												  				<i class="fa fa-star"></i>
+															<% end %>
+															<% if hotel_business.stars - index + 1 > 0 %>
+												 		 		<i class="fa fa-star-half-o"></i>
+								  				  				<% index = index + 1 %>
+								  							<% end %>
+								  							<% while index <= 5  do index = index + 1 %>
+												  				<i class="fa fa-star-o"></i>
+															<% end %>
+											 			</span>
+													</star>
+												</div>
+											</div>
+										</div>
+						 			</div>
+  					    		<% end %>
+							</div>
+							
+							<div class="tab-pane fade" id="beauty" >
+								<% @beauty_businesses.each do |beauty_business| %>
+						 			<div class="col-sm-3">
+										<div class="product-image-wrapper">
+											<div class="single-products">
+												<div class="productinfo text-center">
+													<a href="/welcome/<%=beauty_business.yelp_business_id%>" target="new"><%= image_tag 'home/beauty.jpg', :alt => '' %></a>
+													<a href="/welcome/<%=beauty_business.yelp_business_id%>" target="new" style="text-decoration: none"><h2><%= beauty_business.name %></h2></a>
+													<h4><%= beauty_business.reviews.size.to_s + " reviews" %></h4>
+													<star>
+											 			<span>
+											    			<% index = 1 %>
+											    			<% while index <= beauty_business.stars do index = index + 1 %>
+												  				<i class="fa fa-star"></i>
+															<% end %>
+															<% if beauty_business.stars - index + 1 > 0 %>
+												 		 		<i class="fa fa-star-half-o"></i>
+								  				  				<% index = index + 1 %>
+								  							<% end %>
+								  							<% while index <= 5  do index = index + 1 %>
+												  				<i class="fa fa-star-o"></i>
+															<% end %>
+											 			</span>
+													</star>
+												</div>
+											</div>
+										</div>
+						 			</div>
+  					    		<% end %>
+							</div>
+							
+						</div>
+					</div><!--/category-tab-->
+					
+					<div class="recommended_items"><!--recommended_items-->
+						
+						<h2 class="title text-center">recommended <%= @catego%></h2>
+						
+						<div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+							<div class="carousel-inner">
+								<div class="item active">
+									<% for i in 0..2 %>
+									  <% business=@recommendations[i][:business]%>
+									  <div class="col-sm-4">
+										<div class="product-image-wrapper">
+											<div class="single-products">
+												<div class="productinfo text-center">
+														<% tags = business.categories.map(&:downcase) %>
+														<% if (tags.include?"restaurant") || (tags.include?"food") || (tags.include?"restaurants") || (tags.include?"foods") %>
+															<% image_dir = 'home/restaurant_recommend.jpg'%>
+														<% elsif (tags.include?"education") || (tags.include?"school") || (tags.include?"schools") || (tags.include?"university") || (tags.include?"universities") || (tags.include?"college") || (tags.include?"colleges") %>
+															<% image_dir = 'home/education_recommend.jpg'%>
+														<% elsif (tags.include?"entertainment") || (tags.include?"film") || (tags.include?"films") || (tags.include?"music") %>
+															<% image_dir = 'home/entertainment_recommend.jpg'%>
+														<% elsif (tags.include?"shopping") %>
+															<% image_dir = 'home/shopping_recommend.jpg'%>
+														<% elsif (tags.include?"hotel") || (tags.include?"hotels") %>
+															<% image_dir = 'home/hotel_recommend.jpg' %>
+														<% elsif (tags.include?"beauty") || (tags.include?"beauties") %>
+															<% image_dir = 'home/beauty_recommend.jpg' %>
+														<% else %>
+															<% image_dir = 'home/yelpio-all_recommend.png'%>
+														<% end %>
+														<a href="/welcome/<%=business.yelp_business_id%>" target="new"><%= image_tag image_dir, :alt => '' %></a>
+														<a href="/welcome/<%=business.yelp_business_id%>" target="new" style="text-decoration: none"><h2><%= business.name %></h2></a>
+														<h4><%= business.reviews.size.to_s + " reviews" %></h4>
+														<p><%= business.full_address %></p>
+														<p><%= business.categories %></p>
+														<star>
+											 			  <span>
+											    			<% index = 1 %>
+											    			<% while index <= business.stars do index = index + 1 %>
+												  				<i class="fa fa-star"></i>
+															<% end %>
+															<% if business.stars - index + 1 > 0 %>
+												 		 		<i class="fa fa-star-half-o"></i>
+								  				  				<% index = index + 1 %>
+								  							<% end %>
+								  							<% while index <= 5  do index = index + 1 %>
+												  				<i class="fa fa-star-o"></i>
+															<% end %>
+											 			  </span>
+														</star>
+												</div>
+											</div>
+										</div>
+									</div>
+									<% end %>
+								</div>
+								
+								<div class="item">
+									<% for i in 3..5 %>
+									  <% business=@recommendations[i][:business]%>
+									  <div class="col-sm-4">
+										<div class="product-image-wrapper">
+											<div class="single-products">
+												<div class="productinfo text-center">
+														<% tags = business.categories.map(&:downcase) %>
+														<% if (tags.include?"restaurant") || (tags.include?"food") || (tags.include?"restaurants") || (tags.include?"foods") %>
+															<% image_dir = 'home/restaurant_recommend.jpg'%>
+														<% elsif (tags.include?"education") || (tags.include?"school") || (tags.include?"schools") || (tags.include?"university") || (tags.include?"universities") || (tags.include?"college") || (tags.include?"colleges") %>
+															<% image_dir = 'home/education_recommend.jpg'%>
+														<% elsif (tags.include?"entertainment") || (tags.include?"film") || (tags.include?"films") || (tags.include?"music") %>
+															<% image_dir = 'home/entertainment_recommend.jpg'%>
+														<% elsif (tags.include?"shopping") %>
+															<% image_dir = 'home/shopping_recommend.jpg'%>
+														<% elsif (tags.include?"hotel") || (tags.include?"hotels") %>
+															<% image_dir = 'home/hotel_recommend.jpg' %>
+														<% elsif (tags.include?"beauty") || (tags.include?"beauties") %>
+															<% image_dir = 'home/beauty_recommend.jpg' %>
+														<% else %>
+															<% image_dir = 'home/yelpio-all_recommend.png'%>
+														<% end %>
+														<a href="/welcome/<%=business.yelp_business_id%>" target="new"><%= image_tag image_dir, :alt => '' %></a>
+														<a href="/welcome/<%=business.yelp_business_id%>" target="new" style="text-decoration: none"><h2><%= business.name %></h2></a>
+														<h4><%= business.reviews.size.to_s + " reviews" %></h4>
+														<p><%= business.full_address %></p>
+														<p><%= business.categories %></p>
+														<star>
+											 			  <span>
+											    			<% index = 1 %>
+											    			<% while index <= business.stars do index = index + 1 %>
+												  				<i class="fa fa-star"></i>
+															<% end %>
+															<% if business.stars - index + 1 > 0 %>
+												 		 		<i class="fa fa-star-half-o"></i>
+								  				  				<% index = index + 1 %>
+								  							<% end %>
+								  							<% while index <= 5  do index = index + 1 %>
+												  				<i class="fa fa-star-o"></i>
+															<% end %>
+											 			  </span>
+														</star>
+												</div>
+											</div>
+										</div>
+									  </div>
+									<% end %>
+								</div>
+							</div>
+							 <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
+								<i class="fa fa-angle-left"></i>
+							  </a>
+							  <a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
+								<i class="fa fa-angle-right"></i>
+							  </a>			
+						</div>
+					</div><!--/recommended_items-->
+					
+				</div>
+			</div>
+		</div>
+	</section>
+	
+
+</body>
+</html>

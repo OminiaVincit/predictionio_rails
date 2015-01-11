@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141202035049) do
+ActiveRecord::Schema.define(version: 20150104155912) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,11 @@ ActiveRecord::Schema.define(version: 20141202035049) do
     t.float    "longitude"
     t.float    "latitude"
     t.text     "categories"
+    t.integer  "reviews_count",    default: 0
+    t.string   "yelp_url",         default: "#"
+    t.string   "yelp_mobile_url",  default: "#"
+    t.string   "yelp_image_url",   default: "#"
+    t.string   "yelp_real_id"
   end
 
   create_table "reviews", force: true do |t|
@@ -55,7 +60,20 @@ ActiveRecord::Schema.define(version: 20141202035049) do
     t.float    "average_stars"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "reviews_count", default: 0, null: false
+    t.integer  "reviews_count",          default: 0,  null: false
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet     "current_sign_in_ip"
+    t.inet     "last_sign_in_ip"
   end
+
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["yelp_user_id"], name: "index_users_on_yelp_user_id", unique: true, using: :btree
 
 end
