@@ -208,10 +208,22 @@
 											<i class="fa fa-star-o"></i>
 										<% end %>
 									</span>
-									<button type="button" class="btn btn-fefault cart">
-										<i class="fa fa-star"></i>
-										Add to wishlist
-									</button>
+									<span> <%= @business.stars %> </span>
+									<form action="/reviews" class="new_review pull-right" id="new_review" method="post">
+											<input type="hidden" name="review[content]" value="" />
+											<input type="hidden" name="review[stars]" value="5" />
+											<input type="hidden" name="review[yelp_user_id]" value="<%=current_user.yelp_user_id%>" />
+											<input type="hidden" name="review[yelp_business_id]" value="<%=@business.yelp_business_id%>" />
+																
+											<div class="actions">
+    											<button type="submit" class="btn btn-fefault cart">
+    												<i class="fa fa-star"></i>
+													I like it
+												</button>
+  											</div>
+					
+									</form>
+										
 								</span>
 								<p><b>Availability:</b></p>
 								<p><b>Condition:</b></p>
