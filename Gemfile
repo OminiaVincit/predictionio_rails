@@ -55,3 +55,4 @@ gem "font-awesome-rails"
 gem 'yelp', require: 'yelp'
 gem 'devise'
 gem 'jquery-star-rating-rails'
+

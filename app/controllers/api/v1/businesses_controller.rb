@@ -14,12 +14,12 @@ class Api::V1::BusinessesController < Api::V1::BaseController
     
     if (sort=="id" || sort=="name" || sort =="stars" || sort == "created_at" || sort == "updated_at") then
       sql_cmd = sql_cmd + sort
-    elsif
+    else
       sql_cmd = "id"
     end
     if (order=="ASC") then
       sql_cmd = sql_cmd + " ASC"
-    elsif
+    else
       sql_cmd = sql_cmd + " DESC"
     end 
     

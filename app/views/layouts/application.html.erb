@@ -107,7 +107,7 @@
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
 								<% if user_signed_in? %>
-									<li><a href="/users/<%=current_user.id%>"><i class="fa fa-star"></i> Wishlist</a></li>
+									<li><a href="/users/<%=current_user.id%>" target = "new"><i class="fa fa-star"></i> Wishlist</a></li>
 									<li><a href="<%=edit_user_registration_path%>"><i class="fa fa-user"></i> Edit  <strong><%= current_user.name %></strong> profile</a></li>
 									<li><a href="<%=destroy_user_session_path%>"><i class="fa fa-unlock"></i> Logout</a></li>
 								<% else %>

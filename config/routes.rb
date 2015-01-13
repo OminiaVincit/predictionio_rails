@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   #  end
   #end
 
+  get '/api' => redirect('/api/v1/api_doc/index')
   resources :users, only: [:index, :show]
   resources :businesses, only: [:index, :show]
   resources :welcome, only: [:index, :login, :show]

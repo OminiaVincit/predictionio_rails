@@ -1,3 +1,6 @@
+<head>
+	<title> API-docs</title>
+</head>
 <h1 id="yelpio-api">Yelpio API</h1>
 <p>Yelpio API is a <em>short api</em> service using the YELP data set and prediction IO system.</p>
 <pre><code>users_path                  GET     /users(.:format)                        users#index
@@ -161,9 +164,9 @@ end</code></pre>
 </ul>
 <h3 id="create-a-user-post">Create a user [POST]</h3>
 <ul>
-<li>curl -H “Content-Type: application/json” -X POST –data “<span class="citation">@user.json</span>” http://yelpio.hongo.wide.ad.jp/api/v1/users</li>
+<li>curl -H “Content-Type: application/json” -X POST --data “<span class="citation">@user.json</span>” http://yelpio.hongo.wide.ad.jp/api/v1/users</li>
 <li><p>Request (<span class="citation">@user.json</span>) (application/json)</p>
-<pre><code>[{&quot;user&quot;:{&quot;name&quot;:&quot;Ammy&quot;, &quot;yelp_user_id&quot;:&quot;AppTestForPostYelpUserId&quot;}}]</code></pre></li>
+<pre><code>[{&quot;user&quot;:{&quot;name&quot;:&quot;Ammy&quot;, &quot;yelp_user_id&quot;:&quot;AppTestForPostYelpUserId&quot;, &quot;email&quot;:&quot;hogehoge@gmail.com&quot;, &quot;password&quot;:&quot;hogehoge&quot;, &quot;password_confirmation&quot;:&quot;hogehoge&quot;}}]</code></pre></li>
 <li><p>Response 201 (application/json)</p>
 <pre><code>[{&quot;id&quot;:43885,&quot;yelp_user_id&quot;:&quot;AppTestForPostYelpUserId&quot;,&quot;name&quot;:&quot;Ammy&quot;,&quot;average_stars&quot;:null,&quot;created_at&quot;:&quot;2014-12-04T09:30:53.555Z&quot;,&quot;updated_at&quot;:&quot;2014-12-04T09:30:53.555Z&quot;,&quot;reviews_count&quot;:0}]</code></pre></li>
 <li><p>Response null JSON string if the user already existed in the database</p></li>
@@ -189,9 +192,9 @@ end</code></pre>
 </ul>
 <h3 id="update-user-information-put">Update user information [PUT]</h3>
 <ul>
-<li>curl -H “Content-Type: application/json” -X PUT –data “<span class="citation">@user.json</span>” http://yelpio.hongo.wide.ad.jp/api/v1/users/1/</li>
+<li>curl -H “Content-Type: application/json” -X PUT --data “<span class="citation">@user.json</span>” http://yelpio.hongo.wide.ad.jp/api/v1/users/1/</li>
 <li><p>Request (<span class="citation">@user.json</span>) (application/json)</p>
-<pre><code>[{&quot;user&quot;:{&quot;name&quot;:&quot;Jessica&quot;, &quot;yelp_user_id&quot;:&quot;AppTestForPostYelpUserId&quot;}}]</code></pre></li>
+<pre><code>[{&quot;user&quot;:{&quot;name&quot;:&quot;Jessica&quot;, &quot;yelp_user_id&quot;:&quot;AppTestForPostYelpUserId&quot;, &quot;email&quot;:&quot;hogehoge@gmail.com&quot;, &quot;password&quot;:&quot;hogehoge&quot;, &quot;password_confirmation&quot;:&quot;hogehoge&quot;}}]</code></pre></li>
 <li><p>Response 201 (application/json)</p>
 <pre><code>[{&quot;id&quot;:43885,&quot;yelp_user_id&quot;:&quot;AppTestForPostYelpUserId&quot;,&quot;name&quot;:&quot;Jessica&quot;,&quot;average_stars&quot;:null,&quot;created_at&quot;:&quot;2014-12-04T09:30:53.555Z&quot;,&quot;updated_at&quot;:&quot;2014-12-04T09:33:32.789Z&quot;,&quot;reviews_count&quot;:0}]</code></pre></li>
 <li><p>Response null JSON string if the user doesn’t exist in the database</p></li>
@@ -203,6 +206,8 @@ end</code></pre>
 <pre><code>[{&quot;business&quot;:{&quot;id&quot;:4408,&quot;yelp_business_id&quot;:&quot;Nwh2N0k-u4q_dV2VLY4Fgw&quot;,&quot;name&quot;:&quot;Cafe At Sun City&quot;,&quot;full_address&quot;:&quot;3385 N Hunt Hwy\nSte 121\nFlorence, AZ 85132&quot;,&quot;city&quot;:&quot;Florence&quot;,&quot;state&quot;:&quot;AZ&quot;,&quot;stars&quot;:2.5,&quot;created_at&quot;:&quot;2014-11-29T06:23:27.377Z&quot;,&quot;updated_at&quot;:&quot;2014-12-02T07:00:15.921Z&quot;,&quot;longitude&quot;:-111.484426,&quot;latitude&quot;:33.06293,&quot;categories&quot;:[&quot;Cafes&quot;,&quot;Restaurants&quot;]},&quot;score&quot;:5.0}]</code></pre></li>
 <li><p>Response null JSON string if the user doesn’t exist in the database</p></li>
 </ul>
+The query can be posted by categorize
+<li>curl -H “Accept: application/json” “http://yelpio.hongo.wide.ad.jp/api/v1/users/6279?method=predict&amp;num=1&amp;categorize=restaurant”</li>
 <h1 id="group-businesses">Group Businesses</h1>
 <p>Businesses related resources of the <strong>Yelpio API</strong></p>
 <h2 id="businesses-collection">Businesses Collection [<a href="http://yelpio.hongo.wide.ad.jp/api/v1/businesses">http://yelpio.hongo.wide.ad.jp/api/v1/businesses</a>]</h2>

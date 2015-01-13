@@ -14,12 +14,12 @@ class Api::V1::ReviewsController < Api::V1::BaseController
     
     if (sort=="id" || sort=="business_id" || sort == "yelp_user_id" || sort == "yelp_business_id" || sort =="user_id" || sort == "created_at" || sort == "updated_at" || sort == "stars") then
       sql_cmd = sql_cmd + sort
-    elsif
+    else
       sql_cmd = "id"
     end
     if (order=="ASC") then
       sql_cmd = sql_cmd + " ASC"
-    elsif
+    else
       sql_cmd = sql_cmd + " DESC"
     end 
     
@@ -71,8 +71,7 @@ class Api::V1::ReviewsController < Api::V1::BaseController
       end
      end
     end
-    if save_flag == true
-      sent = send_review(@review)
+    if save_flag == true && send_review(@review)
        #retrain data
 #       if sent == true
 #         port = ""
@@ -123,19 +122,19 @@ class Api::V1::ReviewsController < Api::V1::BaseController
 
     def send_review(review)
       sent = false
-      if page_params[:categorize]
-       catego = page_params[:categorize].downcase
-      elsif
-       catego = ""
-      end
-      res_flag = ( catego == "restaurant" || catego == "restaurants" || catego == "food" || catego == "foods")
-      if res_flag == true
-        client_yelp = PredictionIO::EventClient.new(ENV['PIO_APP_KEY2'], ENV['PIO_EVENT_SERVER_URL'])
-      end
-      client = PredictionIO::EventClient.new(ENV['PIO_APP_KEY'], ENV['PIO_EVENT_SERVER_URL'])
+      
       # Only send reviews that have a valid user and business
       if review.user && review.business
-        client.create_event(
+      	
+      	business_client = PredictionIO::EventClient.new(ENV['PIO_APP_KEY_BUSINESS'], ENV['PIO_EVENT_SERVER_URL'])
+      	restaurant_client = PredictionIO::EventClient.new(ENV['PIO_APP_KEY_RESTAURANT' ], ENV['PIO_EVENT_SERVER_URL'])
+      	education_client = PredictionIO::EventClient.new(ENV['PIO_APP_KEY_EDUCATION' ], ENV['PIO_EVENT_SERVER_URL'])
+      	entertainment_client = PredictionIO::EventClient.new(ENV['PIO_APP_KEY_ENTERTAINMENT' ], ENV['PIO_EVENT_SERVER_URL'])
+      	shopping_client = PredictionIO::EventClient.new(ENV['PIO_APP_KEY_SHOPPING' ], ENV['PIO_EVENT_SERVER_URL'])
+      	hotel_client = PredictionIO::EventClient.new(ENV['PIO_APP_KEY_HOTEL' ], ENV['PIO_EVENT_SERVER_URL'])
+      	beauty_client = PredictionIO::EventClient.new(ENV['PIO_APP_KEY_BEAUTY' ], ENV['PIO_EVENT_SERVER_URL'])
+      	
+        business_client.create_event(
 	  		'rate',
 	  		'user',
 	  		review.user.id, {
@@ -145,24 +144,104 @@ class Api::V1::ReviewsController < Api::V1::BaseController
         		'properties'       => {'rating' => review.stars} 
 	  		}
 		)
-        if res_flag == true
-         client_yelp.create_event(
-          'rate',
-          'user',
-          review.user.id, {
-            'targetEntityType' => 'item',
-            'targetEntityId'   => review.business.id,
-            'eventTime'        => review.created_at,
-            'properties'       => {'rating' => review.stars}
-          }
-        )
+        
+        tags = review.business.categories.map(&:downcase)
+        restaurant = (tags.include?"restaurant") || (tags.include?"food") || (tags.include?"restaurants") || (tags.include?"foods")
+        education = (tags.include?"education") || (tags.include?"school") || (tags.include?"schools") || (tags.include?"university") || (tags.include?"universities") || (tags.include?"college") || (tags.include?"colleges")
+        entertainment = (tags.include?"entertainment") || (tags.include?"film") || (tags.include?"films") || (tags.include?"music")
+        shopping = (tags.include?"shopping")
+        hotel    = (tags.include?"hotel") || (tags.include?"hotels")
+        beauty   = (tags.include?"beauty") || (tags.include?"beauties")
+
+        if restaurant == true
+	         restaurant_client.create_event(
+	         'rate',
+	         'user',
+	         review.user.id, {
+		          'targetEntityType' => 'item',
+		          'targetEntityId' => review.business.id,
+		          'eventTime' => review.created_at,
+		          'properties' => {'rating' => review.stars}
+             }
+        	)
+            puts "Sent review #{review.id} from user #{review.user.id} of business #{review.business.id} in categories #{review.business.categories}."
         end
-        puts "Sent review #{review.id} from user #{review.user.id} of business #{review.business.id} PredictionIO."
+
+        if education == true
+           education_client.create_event(
+            'rate',
+            'user',
+            review.user.id, {
+              'targetEntityType' => 'item',
+              'targetEntityId' => review.business.id,
+              'eventTime' => review.created_at,
+              'properties' => {'rating' => review.stars}
+            }
+           )
+            puts "Sent review #{review.id} from user #{review.user.id} of business #{review.business.id} in categories #{review.business.categories}."
+        end
+
+        if entertainment == true
+           entertainment_client.create_event(
+            'rate',
+            'user',
+            review.user.id, {
+              'targetEntityType' => 'item',
+              'targetEntityId' => review.business.id,
+              'eventTime' => review.created_at,
+              'properties' => {'rating' => review.stars}
+            }
+           )
+            puts "Sent review #{review.id} from user #{review.user.id} of business #{review.business.id} in categories #{review.business.categories}."
+        end
+
+        if shopping == true
+           shopping_client.create_event(
+            'rate',
+            'user',
+            review.user.id, {
+              'targetEntityType' => 'item',
+              'targetEntityId' => review.business.id,
+              'eventTime' => review.created_at,
+              'properties' => {'rating' => review.stars}
+            }
+           )
+            puts "Sent review #{review.id} from user #{review.user.id} of business #{review.business.id} in categories #{review.business.categories}."
+        end
+
+        if hotel == true
+           hotel_client.create_event(
+            'rate',
+            'user',
+            review.user.id, {
+              'targetEntityType' => 'item',
+              'targetEntityId' => review.business.id,
+              'eventTime' => review.created_at,
+              'properties' => {'rating' => review.stars}
+            }
+           )
+            puts "Sent review #{review.id} from user #{review.user.id} of business #{review.business.id} in categories #{review.business.categories}."
+        end
+
+        if beauty == true
+           beauty_client.create_event(
+            'rate',
+            'user',
+            review.user.id, {
+              'targetEntityType' => 'item',
+              'targetEntityId' => review.business.id,
+              'eventTime' => review.created_at,
+              'properties' => {'rating' => review.stars}
+            }
+           )
+            puts "Sent review #{review.id} from user #{review.user.id} of business #{review.business.id} in categories #{review.business.categories}."
+        end          
         sent = true
       end
       sent
       rescue => e
+        sent = false
+        puts "Error! Review send to Prediction IO failed. #{e.message}"
         sent
-        #puts "Error! Review #{review.id} failed. #{e.message}"
    end
 end

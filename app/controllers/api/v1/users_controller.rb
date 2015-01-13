@@ -9,13 +9,11 @@ class Api::V1::UsersController < Api::V1::BaseController
   def index
     plural_resource_name = "@#{resource_name.pluralize}"    
     sql_cmd = ""
+    
     # Get type of sorting and order
     sort = page_params[:sort]
     order = page_params[:order]
-    num = 10
-    if page_params[:num]
-     num = page_params[:num].to_i
-    end
+
     if page_params[:method]=="predict"  && (query_params[:id] || query_params[:yelp_user_id])
       num = 10
       if page_params[:num]
@@ -23,44 +21,47 @@ class Api::V1::UsersController < Api::V1::BaseController
       end
       if query_params[:yelp_user_id]
         @user = User.where(yelp_user_id: query_params[:yelp_user_id]).first
-      elsif 
+      else
         @user = User.where(id: query_params[:id]).first
       end
       if @user
-        if page_params[:model] == "retrain"
-          port = ""
-          catego = page_params[:categorize].downcase
-          if catego == "restaurant" || catego == "restaurants" || catego == "food" || catego == "foods"
-            port = ENV['DEPLOY_PORT2']
-            engine_dir = "cd " + ENV['ENGINE_DIR_YELP'] 
-          elsif
-            port = ENV['DEPLOY_PORT1']
-            engine_dir = "cd " + ENV['ENGINE_DIR']
-          end
-          cmd1 = engine_dir + " && $PIO_HOME/bin/pio train"
-          system( cmd1 )
-          #cmd2 = engine_dir + " && $PIO_HOME/bin/pio undeploy " + " --port " + port
-          #system( cmd2 )
-          cmd3 = engine_dir + " && $PIO_HOME/bin/pio deploy " + " --port " + port + " &"
-          system( cmd3 )
-          # Wait until redeploy finish
-          cmd4 = "curl -IsL -X GET http://localhost:" + port + "/ | grep \"HTTP/1.1\""
-          while (!system(cmd4)) do
-	    sleep(1)
-          end
-        end
+
+#         if page_params[:model] == "retrain"
+#           port = ""
+#           catego = page_params[:categorize].downcase
+#           if catego == "restaurant" || catego == "restaurants" || catego == "food" || catego == "foods"
+#             port = ENV['DEPLOY_PORT2']
+#             engine_dir = "cd " + ENV['ENGINE_DIR_YELP'] 
+#           elsif
+#             port = ENV['DEPLOY_PORT1']
+#             engine_dir = "cd " + ENV['ENGINE_DIR']
+#           end
+#           cmd1 = engine_dir + " && $PIO_HOME/bin/pio train"
+#           system( cmd1 )
+#           #cmd2 = engine_dir + " && $PIO_HOME/bin/pio undeploy " + " --port " + port
+#           #system( cmd2 )
+#           cmd3 = engine_dir + " && $PIO_HOME/bin/pio deploy " + " --port " + port + " &"
+#           system( cmd3 )
+#           # Wait until redeploy finish
+#           cmd4 = "curl -IsL -X GET http://localhost:" + port + "/ | grep \"HTTP/1.1\""
+#           while (!system(cmd4)) do
+# 	    sleep(1)
+#           end
+#         end
+
         resources = predict(@user.id, num)
       end
-    elsif
+    else
       resources = resource_class.where(query_params)
       if (sort=="id" || sort=="name" || sort =="average_stars" || sort == "created_at" || sort == "updated_at" || sort == "reviews_count") then
         sql_cmd = sql_cmd + sort
-      elsif
+      else
         sql_cmd = "id"
       end
+      
       if (order=="ASC") then
         sql_cmd = sql_cmd + " ASC"
-      elsif
+      else
         sql_cmd = sql_cmd + " DESC"
       end 
     
@@ -84,38 +85,8 @@ class Api::V1::UsersController < Api::V1::BaseController
       if page_params[:num] 
         num = page_params[:num].to_i
       end
-      
-      # Create new PredictionIO client.
-      # client = PredictionIO::EngineClient.new(ENV['PIO_DEPLOY_URL'])
-
-      # Query PredictionIO for 5 recommendations!
-      # object = client.send_query('user' => @user.id, 'num' => num)
-
-      # Initialize empty recommendations array.
-      # @recommendations = []
-
-      # Loop though item recommendations returned from PredictionIO.
-      #object['productScores'].each do |item|
-        # Initialize empty recommendation hash.
-      #  recommendation = {}
-
-        # Each item hash has only one key value pair so the first key is the item ID (in our case the business ID).
-      #  business_id = item.values.first
-
-        # Find the business.
-      #  business = Business.where(id: business_id).first
-      #  recommendation[:business] = business
-
-        # The value of the hash is the predicted preference score.
-      #  score = item.values.second
-      #  recommendation[:score] = score
-
-      #  # Add to the array of recommendations.
-      #  @recommendations << recommendation
-      #  end
-      #  render :json =>  @recommendations
       render :json => predict(@user.id, num)
-    elsif
+    else
       render :json =>  @user
     end
   end
@@ -124,12 +95,19 @@ class Api::V1::UsersController < Api::V1::BaseController
   def create 
     yelp_user_id = resource_params[:yelp_user_id]
     user_name    = resource_params[:name]
+    email		 = resource_params[:email]
+    password	 = resource_params[:password]
+    password_confirmation = resource_params[:password_confirmation]
+    
     save_flag    = false
 
     if yelp_user_id && user_name && user_name.delete(' ').length > 0 && (!User.where(yelp_user_id: yelp_user_id).first)
       @user = User.new
       @user.yelp_user_id = yelp_user_id
       @user.name         = user_name
+      @user.email		 = email
+      @user.password	 = password
+      @user.password_confirmation	= password_confirmation
       set_resource(@user)
       if get_resource.save
         save_flag = true       
@@ -168,7 +146,7 @@ class Api::V1::UsersController < Api::V1::BaseController
 
     # Permit format for update, create
     def user_params
-      params.require(:user).permit(:name, :yelp_user_id)
+      params.require(:user).permit(:name, :yelp_user_id, :email, :password, :password_confirmation)
     end
 
     # Permit query GET like http://localhost:3000/api/users.json?yelp_user_id=Ndj0VsWFoIJQJV6p3zswzg
@@ -176,12 +154,12 @@ class Api::V1::UsersController < Api::V1::BaseController
     #   http://localhost:3000/api/users.json?id=31919
     
     def query_params
-      # Requie auth here: ex params.require(:auth)
+      # Require auth here: ex params.require(:auth)
       params.permit(:id,:yelp_user_id)
     end
     
     def page_params
-      params.permit(:page, :page_size, :num, :sort, :order, :method,:categorize, :model)
+      params.permit(:page, :page_size, :num, :sort, :order, :method,:categorize)
     end
     
     def predict(uid,n = 10)
@@ -189,13 +167,23 @@ class Api::V1::UsersController < Api::V1::BaseController
       if Review.where(user_id: uid).first
         if page_params[:categorize]
           catego = page_params[:categorize].downcase
-        elsif
+        else
           catego = ""
         end
-        if catego == "restaurant" || catego == "restaurants" || catego == "food" || catego == "foods"
-          client = PredictionIO::EngineClient.new(ENV['PIO_DEPLOY_URL2'])
-        elsif
-          client = PredictionIO::EngineClient.new(ENV['PIO_DEPLOY_URL'])
+        if (catego == "restaurant" || catego == "restaurants" || catego == "food" || catego == "foods")
+          client = PredictionIO::EngineClient.new(ENV['PIO_DEPLOY_URL_RESTAURANT'])
+        elsif (catego == "education" || catego == "educations" || catego == "school" || catego == "schools" || catego == "college" || catego == "colleges")
+          client = PredictionIO::EngineClient.new(ENV['PIO_DEPLOY_URL_EDUCATION'])
+        elsif (catego == "entertainment" || catego == "music" || catego == "film" || catego == "art" || catego == "films")
+          client = PredictionIO::EngineClient.new(ENV['PIO_DEPLOY_URL_ENTERTAINMENT'])
+        elsif (catego == "shopping")
+          client = PredictionIO::EngineClient.new(ENV['PIO_DEPLOY_URL_SHOPPING'])
+        elsif (catego == "hotel" || catego == "hotels")
+          client = PredictionIO::EngineClient.new(ENV['PIO_DEPLOY_URL_HOTEL'])
+        elsif (catego == "beauty" || catego == "beauties")
+          client = PredictionIO::EngineClient.new(ENV['PIO_DEPLOY_URL_BEAUTY'])
+        else
+          client = PredictionIO::EngineClient.new(ENV['PIO_DEPLOY_URL_BUSINESS'])
         end
         object = client.send_query('user' => uid.to_i, 'num' => n.to_i)
         object['productScores'].each do |item|
@@ -203,14 +191,13 @@ class Api::V1::UsersController < Api::V1::BaseController
           business_id = item.values.first
           business = Business.where(id: business_id).first
           recommendation[:business] = business
-	  score = item.values.second
-	  recommendation[:score] = score
-	  @recommendations << recommendation
+	  	  score = item.values.second
+	      recommendation[:score] = score
+	      @recommendations << recommendation
         end
       end
       @recommendations
       rescue => e
        @recommendations
-      #@recommendations  
     end
 end
