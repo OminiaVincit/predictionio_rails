@@ -123,6 +123,14 @@ class WelcomeController < ApplicationController
   	if !@business
   		render :file => 'public/404.html', :status => :not_found, :layout => false
   	elsif
+  		# Get the map info
+  		#@hash = Gmaps4rails.build_markers(@business) do |business, marker|
+      	#	marker.lat business.latitude
+      	#	marker.lng business.longitude
+      	#	marker.infowindow business.name
+      	#	marker.json({title: business.yelp_real_id})
+    	#end
+    
   		@reviews = Review.where(yelp_business_id: params[:id]).order('created_at DESC')
   															  .page(page_params[:page])
                          									  .per(page_params[:page_size])

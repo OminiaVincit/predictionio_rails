@@ -3,35 +3,55 @@
 </head>
 <h1 id="yelpio-api">Yelpio API</h1>
 <p>Yelpio API is a <em>short api</em> service using the YELP data set and prediction IO system.</p>
-<pre><code>users_path                  GET     /users(.:format)                        users#index
-user_path                   GET     /users/:id(.:format)                    users#show
-root_path                   GET     /users#index
-api_apps_path               POST    /api/apps(.:format)                     api/apps#create
-api_v1_api_doc_index_path   GET     /api/v1/api_doc/index(.:format)         api/v1/api_doc#index
-api_v1_users_path           GET     /api/v1/users(.:format)                 api/v1/users#index
-                            POST    /api/v1/users(.:format)                 api/v1/users#create
-new_api_v1_user_path        GET     /api/v1/users/new(.:format)             api/v1/users#new
-edit_api_v1_user_path       GET     /api/v1/users/:id/edit(.:format)        api/v1/users#edit
-api_v1_user_path            GET     /api/v1/users/:id(.:format)             api/v1/users#show
-                            PATCH   /api/v1/users/:id(.:format)             api/v1/users#update
-                            PUT     /api/v1/users/:id(.:format)             api/v1/users#update
-                            DELETE  /api/v1/users/:id(.:format)             api/v1/users#destroy
-api_v1_businesses_path      GET     /api/v1/businesses(.:format)            api/v1/businesses#index
-                            POST    /api/v1/businesses(.:format)            api/v1/businesses#create
-new_api_v1_business_path    GET     /api/v1/businesses/new(.:format)        api/v1/businesses#new
-edit_api_v1_business_path   GET     /api/v1/businesses/:id/edit(.:format)   api/v1/businesses#edit
-api_v1_business_path        GET     /api/v1/businesses/:id(.:format)        api/v1/businesses#show
-                            PATCH   /api/v1/businesses/:id(.:format)        api/v1/businesses#update
-                            PUT     /api/v1/businesses/:id(.:format)        api/v1/businesses#update
-                            DELETE  /api/v1/businesses/:id(.:format)        api/v1/businesses#destroy
-api_v1_reviews_path         GET     /api/v1/reviews(.:format)               api/v1/reviews#index
-                            POST    /api/v1/reviews(.:format)               api/v1/reviews#create
-new_api_v1_review_path      GET     /api/v1/reviews/new(.:format)           api/v1/reviews#new
-edit_api_v1_review_path     GET     /api/v1/reviews/:id/edit(.:format)      api/v1/reviews#edit
-api_v1_review_path          GET     /api/v1/reviews/:id(.:format)           api/v1/reviews#show
-                            PATCH   /api/v1/reviews/:id(.:format)           api/v1/reviews#update
-                            PUT     /api/v1/reviews/:id(.:format)           api/v1/reviews#update
-                            DELETE  /api/v1/reviews/:id(.:format)           api/v1/reviews#destroy</code></pre>
+<pre><code>           user_password POST   /users/password(.:format)             devise/passwords#create
+       new_user_password GET    /users/password/new(.:format)         devise/passwords#new
+      edit_user_password GET    /users/password/edit(.:format)        devise/passwords#edit
+                         PATCH  /users/password(.:format)             devise/passwords#update
+                         PUT    /users/password(.:format)             devise/passwords#update
+cancel_user_registration GET    /users/cancel(.:format)               devise/registrations#cancel
+       user_registration POST   /users(.:format)                      devise/registrations#create
+   new_user_registration GET    /users/sign_up(.:format)              devise/registrations#new
+  edit_user_registration GET    /users/edit(.:format)                 devise/registrations#edit
+                         PATCH  /users(.:format)                      devise/registrations#update
+                         PUT    /users(.:format)                      devise/registrations#update
+                         DELETE /users(.:format)                      devise/registrations#destroy
+        new_user_session GET    /login(.:format)                      devise/sessions#new
+            user_session POST   /login(.:format)                      devise/sessions#create
+    destroy_user_session GET    /logout(.:format)                     devise/sessions#destroy
+           welcome_index GET    /welcome/index(.:format)              welcome#index
+           welcome_login GET    /welcome/login(.:format)              welcome#login
+                     api GET    /api(.:format)                        redirect(301, /api/v1/api_doc/index)
+                   users GET    /users(.:format)                      users#index
+                    user GET    /users/:id(.:format)                  users#show
+                         GET    /welcome(.:format)                    welcome#index
+                 welcome GET    /welcome/:id(.:format)                welcome#show
+                    root GET    /                                     welcome#index
+                api_apps POST   /api/apps(.:format)                   api/apps#create
+    api_v1_api_doc_index GET    /api/v1/api_doc/index(.:format)       api/v1/api_doc#index
+            api_v1_users GET    /api/v1/users(.:format)               api/v1/users#index
+                         POST   /api/v1/users(.:format)               api/v1/users#create
+         new_api_v1_user GET    /api/v1/users/new(.:format)           api/v1/users#new
+        edit_api_v1_user GET    /api/v1/users/:id/edit(.:format)      api/v1/users#edit
+             api_v1_user GET    /api/v1/users/:id(.:format)           api/v1/users#show
+                         PATCH  /api/v1/users/:id(.:format)           api/v1/users#update
+                         PUT    /api/v1/users/:id(.:format)           api/v1/users#update
+                         DELETE /api/v1/users/:id(.:format)           api/v1/users#destroy
+       api_v1_businesses GET    /api/v1/businesses(.:format)          api/v1/businesses#index
+                         POST   /api/v1/businesses(.:format)          api/v1/businesses#create
+     new_api_v1_business GET    /api/v1/businesses/new(.:format)      api/v1/businesses#new
+    edit_api_v1_business GET    /api/v1/businesses/:id/edit(.:format) api/v1/businesses#edit
+         api_v1_business GET    /api/v1/businesses/:id(.:format)      api/v1/businesses#show
+                         PATCH  /api/v1/businesses/:id(.:format)      api/v1/businesses#update
+                         PUT    /api/v1/businesses/:id(.:format)      api/v1/businesses#update
+                         DELETE /api/v1/businesses/:id(.:format)      api/v1/businesses#destroy
+          api_v1_reviews GET    /api/v1/reviews(.:format)             api/v1/reviews#index
+                         POST   /api/v1/reviews(.:format)             api/v1/reviews#create
+       new_api_v1_review GET    /api/v1/reviews/new(.:format)         api/v1/reviews#new
+      edit_api_v1_review GET    /api/v1/reviews/:id/edit(.:format)    api/v1/reviews#edit
+           api_v1_review GET    /api/v1/reviews/:id(.:format)         api/v1/reviews#show
+                         PATCH  /api/v1/reviews/:id(.:format)         api/v1/reviews#update
+                         PUT    /api/v1/reviews/:id(.:format)         api/v1/reviews#update
+                         DELETE /api/v1/reviews/:id(.:format)         api/v1/reviews#destroy</code></pre>
 <h2 id="api-server">API server</h2>
 <ul>
 <li><a href="http://yelpio.hongo.wide.ad.jp/api/v1/api_doc/index">http://yelpio.hongo.wide.ad.jp/api/v1/api_doc/index</a></li>

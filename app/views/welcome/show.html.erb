@@ -1,7 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Business Details | YELPIO-Navi</title>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    
+    <script>
+		var lat = <%= @business.latitude %>, 
+      		lon = <%= @business.longitude %>,
+      		map;
+      	var myLatlng = new google.maps.LatLng(lat,lon);	
+		function initialize() {
+  			var mapOptions = {
+    			zoom: 10,
+    			center: myLatlng
+  			};
+  			map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+  			
+  			var marker = new google.maps.Marker({
+      			position: myLatlng,
+      			map: map,
+      			title: '<%= @business.name %>'
+  			});
+		}
+
+		google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+    
+    
 </head><!--/head-->
 
 <body>
@@ -72,7 +100,10 @@
 				
 				<div class="col-sm-9 padding-right">
 					<div class="product-details"><!--product-details-->
-						<% tags = @business.categories.map(&:downcase) %>
+						<% tags = "" %>
+						<% @business.categories.each do |catego| %>
+						<%   tags = tags + catego.downcase() + " " %>
+						<% end %>
 						<% if (tags.include?"restaurant") || (tags.include?"food") || (tags.include?"restaurants") || (tags.include?"foods") %>
 							<% image_main_dir = 'home/restaurant.jpg'%>
 							<% image_sub_dir_1 = 'product-details/restaurant_similar1.jpg'%>
@@ -95,7 +126,7 @@
 							<% image_sub_dir_7 = 'product-details/education_similar7.jpg'%>
 							<% image_sub_dir_8 = 'product-details/education_similar8.jpg'%>
 							<% image_sub_dir_9 = 'product-details/education_similar9.jpg'%>
-						<% elsif (tags.include?"entertainment") || (tags.include?"film") || (tags.include?"films") || (tags.include?"music") %>
+						<% elsif (tags.include?"entertainment") || (tags.include?"film") || (tags.include?"films") || (tags.include?"music") || (tags.include?"entertainments") || (tags.include?"arts")%>
 							<% image_main_dir = 'home/entertainment.jpg'%>
 							<% image_sub_dir_1 = 'product-details/entertainment_similar1.jpg'%>
 							<% image_sub_dir_2 = 'product-details/entertainment_similar2.jpg'%>
@@ -127,7 +158,7 @@
 							<% image_sub_dir_6 = 'product-details/hotel_similar6.jpg'%>
 							<% image_sub_dir_7 = 'product-details/hotel_similar7.jpg'%>
 							<% image_sub_dir_8 = 'product-details/hotel_similar8.jpg'%>
-							<% image_sub_dir_9 = 'product-details/hotel_similar9.jpg'%>
+							<% image_sub_dir_9 = 'product-details/hotel_similar9c.jpg'%>
 						<% elsif (tags.include?"beauty") || (tags.include?"beauties") %>
 							<% image_main_dir = 'home/beauty.jpg' %>
 							<% image_sub_dir_1 = 'product-details/beauty_similar1.jpg'%>
@@ -186,7 +217,8 @@
 									<i class="fa fa-angle-right"></i>
 								  </a>
 							</div>
-
+							<br></br>
+							<div class="fb-like" data-href="#" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
 						</div>
 						<div class="col-sm-7">
 							<div class="product-information"><!--/product-information-->
@@ -209,7 +241,8 @@
 										<% end %>
 									</span>
 									<span> <%= @business.stars %> </span>
-									<form action="/reviews" class="new_review pull-right" id="new_review" method="post">
+									<% if user_signed_in? %>
+										<form action="/reviews" class="new_review pull-right" id="new_review" method="post">
 											<input type="hidden" name="review[content]" value="" />
 											<input type="hidden" name="review[stars]" value="5" />
 											<input type="hidden" name="review[yelp_user_id]" value="<%=current_user.yelp_user_id%>" />
@@ -221,17 +254,27 @@
 													I like it
 												</button>
   											</div>
-					
-									</form>
+										</form>
+									<% else %>
+										<a href="<%=new_user_session_path%>">
+											<button type="button" class="btn btn-fefault cart">
+    												<i class="fa fa-star"></i>
+													I like it
+											</button>
+										</a>
+									<% end %>
 										
 								</span>
 								<p><b>Availability:</b></p>
 								<p><b>Condition:</b></p>
 								<p><b>Categories:</b> <%= @business.categories%></p>
-								<a href=""><%= image_tag 'product-details/share.png', :class => 'share img-responsive', :alt => ''%></a>
+								<%= image_tag 'product-details/share.png', :class => 'share img-responsive', :alt => ''%>
+								<div id="map-canvas" style="width: 400px; height: 200px"></div>
 							</div><!--/product-information-->
 						</div>
+						
 					</div><!--/product-details-->
+									
 					
 					<div class="category-tab shop-details-tab"><!--category-tab-->
 						<div class="col-sm-12">
@@ -319,6 +362,7 @@
 										</div>
 									</div>
 								</div>
+								
 							</div>
 							
 							<div class="tab-pane fade" id="photos" >
@@ -482,12 +526,15 @@
 										<div class="product-image-wrapper">
 											<div class="single-products">
 												<div class="productinfo text-center">
-														<% tags = business.categories.map(&:downcase) %>
-														<% if (tags.include?"restaurant") || (tags.include?"food") || (tags.include?"restaurants") || (tags.include?"foods") %>
+														<% tags = "" %>
+														<% business.categories.each do |catego| %>
+														<%   tags = tags + catego.downcase() + " " %>
+														<% end %>
+													    <% if (tags.include?"restaurant") || (tags.include?"food") || (tags.include?"restaurants") || (tags.include?"foods") %>
 															<% image_dir = 'home/restaurant_recommend.jpg'%>
 														<% elsif (tags.include?"education") || (tags.include?"school") || (tags.include?"schools") || (tags.include?"university") || (tags.include?"universities") || (tags.include?"college") || (tags.include?"colleges") %>
 															<% image_dir = 'home/education_recommend.jpg'%>
-														<% elsif (tags.include?"entertainment") || (tags.include?"film") || (tags.include?"films") || (tags.include?"music") %>
+														<% elsif (tags.include?"entertainment") || (tags.include?"film") || (tags.include?"films") || (tags.include?"music") || (tags.include?"arts") || (tags.include?"entertainments")%>
 															<% image_dir = 'home/entertainment_recommend.jpg'%>
 														<% elsif (tags.include?"shopping") %>
 															<% image_dir = 'home/shopping_recommend.jpg'%>
@@ -498,6 +545,7 @@
 														<% else %>
 															<% image_dir = 'home/yelpio-all_recommend.png'%>
 														<% end %>
+														
 														<a href="/welcome/<%=business.yelp_business_id%>" target="new"><%= image_tag image_dir, :alt => '' %></a>
 														<a href="/welcome/<%=business.yelp_business_id%>" target="new" style="text-decoration: none"><h2><%= business.name %></h2></a>
 														<h4><%= business.reviews.size.to_s + " reviews" %></h4>
@@ -532,12 +580,15 @@
 										<div class="product-image-wrapper">
 											<div class="single-products">
 												<div class="productinfo text-center">
-														<% tags = business.categories.map(&:downcase) %>
-														<% if (tags.include?"restaurant") || (tags.include?"food") || (tags.include?"restaurants") || (tags.include?"foods") %>
+														<% tags = "" %>
+														<% business.categories.each do |catego| %>
+														<%   tags = tags + catego.downcase() + " " %>
+														<% end %>
+													    <% if (tags.include?"restaurant") || (tags.include?"food") || (tags.include?"restaurants") || (tags.include?"foods") %>
 															<% image_dir = 'home/restaurant_recommend.jpg'%>
 														<% elsif (tags.include?"education") || (tags.include?"school") || (tags.include?"schools") || (tags.include?"university") || (tags.include?"universities") || (tags.include?"college") || (tags.include?"colleges") %>
 															<% image_dir = 'home/education_recommend.jpg'%>
-														<% elsif (tags.include?"entertainment") || (tags.include?"film") || (tags.include?"films") || (tags.include?"music") %>
+														<% elsif (tags.include?"entertainment") || (tags.include?"film") || (tags.include?"films") || (tags.include?"music") || (tags.include?"arts") || (tags.include?"entertainments")%>
 															<% image_dir = 'home/entertainment_recommend.jpg'%>
 														<% elsif (tags.include?"shopping") %>
 															<% image_dir = 'home/shopping_recommend.jpg'%>
@@ -591,4 +642,11 @@
 	</section>
 
 </body>
-</html>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>

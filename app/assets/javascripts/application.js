@@ -25,3 +25,5 @@
 //= require gmaps
 //= require "welcome.js.coffee"
 //= require jquery-star-rating
+//= require "underscore-min.js"
+//= require gmaps/google

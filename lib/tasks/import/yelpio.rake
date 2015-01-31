@@ -13,10 +13,13 @@ namespace :import do
       begin
         # Only send reviews that have a valid user and business.
         if review.user && review.business
-          tags = review.business.categories.map(&:downcase)
+          tags = ""
+          review.business.categories.each do |catego|
+            tags = tags + catego.downcase() + " "   
+          end
           restaurant = (tags.include?"restaurant") || (tags.include?"food") || (tags.include?"restaurants") || (tags.include?"foods")
           education = (tags.include?"education") || (tags.include?"school") || (tags.include?"schools") || (tags.include?"university") || (tags.include?"universities") || (tags.include?"college") || (tags.include?"colleges")
-          entertainment = (tags.include?"entertainment") || (tags.include?"film") || (tags.include?"films") || (tags.include?"music")
+          entertainment = (tags.include?"entertainment") || (tags.include?"entertainment") || (tags.include?"film") || (tags.include?"films") || (tags.include?"music") || (tags.include?"arts")
           shopping = (tags.include?"shopping")
           hotel    = (tags.include?"hotel") || (tags.include?"hotels")
           beauty   = (tags.include?"beauty") || (tags.include?"beauties")

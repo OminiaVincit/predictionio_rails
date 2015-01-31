@@ -171,7 +171,7 @@
 											  <h2><%= business.name %></h2>
 											  <p><%= business.reviews.size.to_s + " reviews" %></p>
 											  <p><%= business.full_address %></p>
-											  <a href="/welcome/<%=business.yelp_business_id%>" class="btn btn-default add-to-cart"><i class="fa fa-bookmark"></i>See more</a>
+											  <a href="/welcome/<%=business.yelp_business_id%>" class="btn btn-default add-to-cart" target="new"><i class="fa fa-bookmark"></i>See more</a>
 											</div>
 										</div>
 								</div>
@@ -192,8 +192,8 @@
 											<li><i class="fa fa-thumbs-up"></i><button type="button" class="btn btn-default post">LIKE</button></li>
 											<li><i class="fa fa-thumbs-down"></i><button type="button" class="btn btn-default post">UNLIKE</button></li>
 											-->
-											<li><a href="#"><i class="fa fa-thumbs-up"></i>LIKE</a></li>
-											<li><a href="#"><i class="fa fa-thumbs-down"></i>UNLIKE</a></li>
+											<li><a href="<%=new_user_session_path%>"><i class="fa fa-thumbs-up"></i>LIKE</a></li>
+											<li><a href="<%=new_user_session_path%>"><i class="fa fa-thumbs-down"></i>UNLIKE</a></li>
 										<% end %>
 									</ul>
 								</div>
@@ -450,12 +450,15 @@
 										<div class="product-image-wrapper">
 											<div class="single-products">
 												<div class="productinfo text-center">
-														<% tags = business.categories.map(&:downcase) %>
+														<% tags = "" %>
+														<% business.categories.each do |catego| %>
+														<%   tags = tags + catego.downcase() + " " %>
+														<% end %>
 														<% if (tags.include?"restaurant") || (tags.include?"food") || (tags.include?"restaurants") || (tags.include?"foods") %>
 															<% image_dir = 'home/restaurant_recommend.jpg'%>
 														<% elsif (tags.include?"education") || (tags.include?"school") || (tags.include?"schools") || (tags.include?"university") || (tags.include?"universities") || (tags.include?"college") || (tags.include?"colleges") %>
 															<% image_dir = 'home/education_recommend.jpg'%>
-														<% elsif (tags.include?"entertainment") || (tags.include?"film") || (tags.include?"films") || (tags.include?"music") %>
+														<% elsif (tags.include?"entertainment") || (tags.include?"entertainments") || (tags.include?"film") || (tags.include?"films") || (tags.include?"music") || (tags.include?"arts") %>
 															<% image_dir = 'home/entertainment_recommend.jpg'%>
 														<% elsif (tags.include?"shopping") %>
 															<% image_dir = 'home/shopping_recommend.jpg'%>
@@ -500,12 +503,15 @@
 										<div class="product-image-wrapper">
 											<div class="single-products">
 												<div class="productinfo text-center">
-														<% tags = business.categories.map(&:downcase) %>
+														<% tags = "" %>
+														<% business.categories.each do |catego| %>
+														<%   tags = tags + catego.downcase() + " " %>
+														<% end %>
 														<% if (tags.include?"restaurant") || (tags.include?"food") || (tags.include?"restaurants") || (tags.include?"foods") %>
 															<% image_dir = 'home/restaurant_recommend.jpg'%>
 														<% elsif (tags.include?"education") || (tags.include?"school") || (tags.include?"schools") || (tags.include?"university") || (tags.include?"universities") || (tags.include?"college") || (tags.include?"colleges") %>
 															<% image_dir = 'home/education_recommend.jpg'%>
-														<% elsif (tags.include?"entertainment") || (tags.include?"film") || (tags.include?"films") || (tags.include?"music") %>
+														<% elsif (tags.include?"entertainment") || (tags.include?"entertainments") || (tags.include?"film") || (tags.include?"films") || (tags.include?"music") || (tags.include?"arts") %>
 															<% image_dir = 'home/entertainment_recommend.jpg'%>
 														<% elsif (tags.include?"shopping") %>
 															<% image_dir = 'home/shopping_recommend.jpg'%>
